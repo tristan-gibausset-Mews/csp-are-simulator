@@ -12,24 +12,30 @@ interface DisplayModeToggleProps {
  */
 export default function DisplayModeToggle({ displayMode, onChange }: DisplayModeToggleProps) {
   return (
-    <div className="flex flex-wrap items-center gap-2 text-xs text-mews-grey-500">
-      <div className="flex rounded-md border border-mews-grey-300 p-0.5">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="inline-flex w-fit gap-0.5 rounded-lg bg-mews-grey-100 p-1 text-xs">
         <button
           type="button"
           onClick={() => onChange('benefits_only')}
-          className={`rounded px-2 py-0.5 font-medium ${displayMode === 'benefits_only' ? 'bg-mews-grey-900 text-white' : 'text-mews-grey-500'}`}
+          className={`rounded-md px-3 py-1.5 font-medium transition-colors ${
+            displayMode === 'benefits_only' ? 'bg-white text-mews-grey-900 shadow-sm' : 'text-mews-grey-500 hover:text-mews-grey-900'
+          }`}
         >
           Sans le nouveau salaire
         </button>
         <button
           type="button"
           onClick={() => onChange('with_new_salary')}
-          className={`rounded px-2 py-0.5 font-medium ${displayMode === 'with_new_salary' ? 'bg-mews-grey-900 text-white' : 'text-mews-grey-500'}`}
+          className={`rounded-md px-3 py-1.5 font-medium transition-colors ${
+            displayMode === 'with_new_salary' ? 'bg-white text-mews-grey-900 shadow-sm' : 'text-mews-grey-500 hover:text-mews-grey-900'
+          }`}
         >
           Avec le nouveau salaire
         </button>
       </div>
-      <span>Par défaut, le nouveau salaire est exclu pour comparer uniquement CSP, préavis, ARE et primes.</span>
+      <p className="text-xs leading-relaxed text-mews-grey-500 sm:max-w-xs sm:text-right">
+        Par défaut, le nouveau salaire est exclu pour comparer uniquement CSP, préavis, ARE et primes.
+      </p>
     </div>
   );
 }

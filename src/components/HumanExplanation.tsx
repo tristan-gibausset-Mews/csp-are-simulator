@@ -70,11 +70,11 @@ export default function HumanExplanation({ result }: HumanExplanationProps) {
   const sentences = buildSentences(result);
 
   return (
-    <section aria-labelledby="human-explanation-title">
+    <section className="card-flat" aria-labelledby="human-explanation-title">
       <h2 id="human-explanation-title" className="sr-only">
         Explication en langage simple
       </h2>
-      <p className="text-sm leading-relaxed text-mews-grey-900">{sentences.join(' ')}</p>
+      <p className="max-w-3xl text-sm leading-7 text-mews-grey-900">{sentences.join(' ')}</p>
     </section>
   );
 }

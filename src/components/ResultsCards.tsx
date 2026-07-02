@@ -18,13 +18,13 @@ interface CardItem {
 
 function Card({ label, value, hint, tooltipKey }: CardItem) {
   return (
-    <div className="card flex flex-col gap-1">
+    <div className="card-flat flex flex-col gap-1">
       <div className="flex items-center gap-1.5">
         <span className="text-xs font-medium uppercase tracking-wide text-mews-grey-500">{label}</span>
         <InfoTooltip text={resultExplanations[tooltipKey]} label={`À propos de : ${label}`} />
       </div>
-      <span className="text-lg font-semibold text-mews-grey-900">{value}</span>
-      {hint && <span className="text-xs text-mews-grey-500">{hint}</span>}
+      <span className="text-lg font-semibold tabular-nums text-mews-grey-900">{value}</span>
+      {hint && <span className="text-xs leading-relaxed text-mews-grey-500">{hint}</span>}
     </div>
   );
 }
@@ -93,10 +93,10 @@ export default function ResultsCards({ result }: ResultsCardsProps) {
 
   return (
     <section aria-labelledby="results-cards-title">
-      <h2 id="results-cards-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
+      <h2 id="results-cards-title" className="section-title mb-4">
         Résultats détaillés
       </h2>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <Card key={item.label} {...item} />
         ))}

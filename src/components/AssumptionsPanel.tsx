@@ -25,12 +25,12 @@ interface Row {
 
 function RowItem({ label, value, tooltip }: Row) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-mews-grey-100 py-1.5 last:border-0">
+    <div className="flex items-center justify-between gap-3 border-b border-mews-grey-100 py-2 last:border-0">
       <span className="flex items-center gap-1.5 text-sm text-mews-grey-500">
         {label}
         {tooltip && <InfoTooltip text={tooltip} label={`À propos de : ${label}`} />}
       </span>
-      <span className="text-right text-sm font-medium text-mews-grey-900">{value}</span>
+      <span className="text-right text-sm font-medium tabular-nums text-mews-grey-900">{value}</span>
     </div>
   );
 }
@@ -80,7 +80,7 @@ export default function AssumptionsPanel({ result }: AssumptionsPanelProps) {
 
   return (
     <section aria-labelledby="assumptions-panel-title">
-      <h2 id="assumptions-panel-title" className="mb-3 text-lg font-semibold text-mews-grey-900">
+      <h2 id="assumptions-panel-title" className="section-title mb-3">
         Hypothèses de calcul
       </h2>
       {rows.map((row) => (

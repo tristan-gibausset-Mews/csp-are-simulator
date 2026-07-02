@@ -15,7 +15,7 @@ function toNumber(value: string): number {
 
 function FieldLabel({ htmlFor, text, tooltip }: { htmlFor: string; text: string; tooltip: string }) {
   return (
-    <div className="mb-1 flex items-center gap-1.5">
+    <div className="mb-1.5 flex items-center gap-1.5">
       <label htmlFor={htmlFor} className="text-sm font-medium text-mews-grey-900">
         {text}
       </label>
@@ -42,24 +42,34 @@ function FieldWithUnit({
   min?: number;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div
+      className={`flex h-10 items-center gap-2 rounded-lg border bg-white pl-3 pr-3 transition-colors ${
+        disabled
+          ? 'border-mews-grey-100 bg-mews-grey-100'
+          : 'border-mews-grey-300 focus-within:border-mews-accent focus-within:ring-2 focus-within:ring-mews-accent/15'
+      }`}
+    >
       <input
         id={id}
         type="number"
         min={min}
         step={step}
-        className="field-input disabled:cursor-not-allowed disabled:bg-mews-grey-100"
+        className="h-full w-full min-w-0 border-0 bg-transparent p-0 text-sm text-mews-grey-900 outline-none focus:ring-0 disabled:cursor-not-allowed disabled:text-mews-grey-500"
         value={value}
         disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
       />
-      <span className="shrink-0 text-xs text-mews-grey-500">{unit}</span>
+      <span className="shrink-0 whitespace-nowrap text-xs font-medium text-mews-grey-500">{unit}</span>
     </div>
   );
 }
 
 function BlockTitle({ children }: { children: string }) {
-  return <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-mews-grey-500">{children}</h3>;
+  return (
+    <h3 className="mb-3 border-b border-mews-grey-100 pb-2 text-xs font-semibold uppercase tracking-wide text-mews-grey-500">
+      {children}
+    </h3>
+  );
 }
 
 export default function InputPanel({ input, onChange }: InputPanelProps) {
@@ -83,14 +93,14 @@ export default function InputPanel({ input, onChange }: InputPanelProps) {
 
   return (
     <section className="card" aria-labelledby="input-panel-title">
-      <h2 id="input-panel-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
+      <h2 id="input-panel-title" className="section-title mb-4">
         Votre situation
       </h2>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
         <div>
           <BlockTitle>Aujourd’hui</BlockTitle>
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div>
               <FieldLabel htmlFor="currentMonthlyGrossSalary" text="Salaire actuel" tooltip={inputExplanations.currentMonthlyGrossSalary} />
               <FieldWithUnit
@@ -105,10 +115,10 @@ export default function InputPanel({ input, onChange }: InputPanelProps) {
               <FieldLabel htmlFor="age" text="Âge" tooltip={inputExplanations.age} />
               <FieldWithUnit id="age" value={input.age} unit="ans" min={16} onChange={(v) => onChange({ age: toNumber(v) })} />
             </div>
-            <label className="flex items-center gap-2 text-sm font-medium text-mews-grey-900">
+            <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-mews-grey-900">
               <input
                 type="checkbox"
-                className="h-4 w-4 rounded border-mews-grey-300 text-mews-accent focus:ring-mews-accent"
+                className="checkbox-input"
                 checked={input.seniorityAtLeastOneYear}
                 onChange={(e) => handleSeniorityToggle(e.target.checked)}
               />
@@ -117,7 +127,7 @@ export default function InputPanel({ input, onChange }: InputPanelProps) {
             </label>
 
             {!input.seniorityAtLeastOneYear && (
-              <div className="rounded-lg border border-mews-accent/40 bg-mews-accent-light p-2">
+              <div className="rounded-lg border border-warn/25 bg-warn-light p-3">
                 <FieldLabel
                   htmlFor="currentEmployerSeniorityMonths"
                   text="Ancienneté chez l’employeur actuel"
@@ -129,7 +139,7 @@ export default function InputPanel({ input, onChange }: InputPanelProps) {
                   unit="mois"
                   onChange={(v) => onChange({ currentEmployerSeniorityMonths: toNumber(v) })}
                 />
-                <p className="mt-1 text-xs text-mews-accent">
+                <p className="mt-1.5 text-xs leading-relaxed text-warn">
                   Ancienneté &lt; 1 an : cette valeur influence l’estimation de vos droits ARE.
                 </p>
               </div>
@@ -152,14 +162,9 @@ export default function InputPanel({ input, onChange }: InputPanelProps) {
 
         <div>
           <BlockTitle>Reprise d’emploi</BlockTitle>
-          <div className="space-y-3">
-            <label className="flex items-center gap-2 text-sm text-mews-grey-900">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-mews-grey-300 text-mews-accent focus:ring-mews-accent"
-                checked={!hasNewJob}
-                onChange={handleNoNewJobToggle}
-              />
+          <div className="space-y-4">
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-mews-grey-900">
+              <input type="checkbox" className="checkbox-input" checked={!hasNewJob} onChange={handleNoNewJobToggle} />
               Pas de reprise d’emploi
             </label>
 

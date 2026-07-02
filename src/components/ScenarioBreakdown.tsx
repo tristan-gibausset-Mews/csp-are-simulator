@@ -14,9 +14,9 @@ interface Row {
 
 function RowItem({ label, value, hint }: Row) {
   return (
-    <div className="flex items-baseline justify-between gap-3 border-b border-mews-grey-100 py-1.5 last:border-0">
+    <div className="flex items-baseline justify-between gap-3 border-b border-mews-grey-100 py-2 last:border-0">
       <span className="text-sm text-mews-grey-500">{label}</span>
-      <span className="text-right text-sm font-medium text-mews-grey-900">
+      <span className="text-right text-sm font-medium tabular-nums text-mews-grey-900">
         {value}
         {hint && <span className="ml-1 block text-xs font-normal text-mews-grey-500">{hint}</span>}
       </span>
@@ -103,22 +103,22 @@ export default function ScenarioBreakdown({ result }: ScenarioBreakdownProps) {
 
   return (
     <section aria-labelledby="scenario-breakdown-title">
-      <h2 id="scenario-breakdown-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
+      <h2 id="scenario-breakdown-title" className="section-title mb-4">
         Détail par scénario
       </h2>
 
-      <div className="mb-3 flex gap-2 sm:hidden">
+      <div className="mb-4 inline-flex gap-0.5 rounded-lg bg-mews-grey-100 p-1 text-sm sm:hidden">
         <button
           type="button"
           onClick={() => setMobileTab('CSP')}
-          className={`flex-1 rounded-lg px-3 py-1.5 text-sm font-medium ${mobileTab === 'CSP' ? 'bg-csp text-white' : 'bg-mews-grey-100 text-mews-grey-500'}`}
+          className={`rounded-md px-3 py-1.5 font-medium transition-colors ${mobileTab === 'CSP' ? 'bg-white text-csp shadow-sm' : 'text-mews-grey-500'}`}
         >
           CSP
         </button>
         <button
           type="button"
           onClick={() => setMobileTab('ARE')}
-          className={`flex-1 rounded-lg px-3 py-1.5 text-sm font-medium ${mobileTab === 'ARE' ? 'bg-are text-white' : 'bg-mews-grey-100 text-mews-grey-500'}`}
+          className={`rounded-md px-3 py-1.5 font-medium transition-colors ${mobileTab === 'ARE' ? 'bg-white text-are shadow-sm' : 'text-mews-grey-500'}`}
         >
           ARE + préavis
         </button>
@@ -126,13 +126,13 @@ export default function ScenarioBreakdown({ result }: ScenarioBreakdownProps) {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div className={mobileTab === 'CSP' ? '' : 'hidden sm:block'}>
-          <h3 className="mb-2 text-sm font-semibold text-csp">CSP</h3>
+          <h3 className="mb-2 border-b-2 border-csp/40 pb-2 text-sm font-semibold text-csp">CSP</h3>
           {cspRows.map((row) => (
             <RowItem key={row.label} {...row} />
           ))}
         </div>
         <div className={mobileTab === 'ARE' ? '' : 'hidden sm:block'}>
-          <h3 className="mb-2 text-sm font-semibold text-are">ARE + préavis</h3>
+          <h3 className="mb-2 border-b-2 border-are/40 pb-2 text-sm font-semibold text-are">ARE + préavis</h3>
           {areRows.map((row) => (
             <RowItem key={row.label} {...row} />
           ))}

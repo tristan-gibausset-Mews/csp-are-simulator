@@ -35,7 +35,7 @@ export default function InfoTooltip({ text, label = 'Plus d’informations' }: I
   }, [open]);
 
   return (
-    <span ref={containerRef} className="relative inline-flex">
+    <span ref={containerRef} className="relative inline-flex align-middle">
       <button
         type="button"
         aria-label={label}
@@ -46,7 +46,7 @@ export default function InfoTooltip({ text, label = 'Plus d’informations' }: I
         onMouseLeave={() => setOpen(false)}
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
-        className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border border-mews-grey-300 bg-white text-[10px] font-semibold leading-none text-mews-grey-500 transition hover:border-mews-accent hover:text-mews-accent focus:outline-none focus:ring-2 focus:ring-mews-accent/30"
+        className="flex h-[17px] w-[17px] shrink-0 items-center justify-center rounded-full border border-mews-grey-300/80 bg-white text-[10px] font-medium leading-none text-mews-grey-500 transition-colors hover:border-mews-accent hover:text-mews-accent focus:outline-none focus:ring-2 focus:ring-mews-accent/25"
       >
         i
       </button>
@@ -54,7 +54,7 @@ export default function InfoTooltip({ text, label = 'Plus d’informations' }: I
         <span
           id={tooltipId}
           role="tooltip"
-          className="absolute bottom-full left-1/2 z-30 mb-2 w-64 max-w-[280px] -translate-x-1/2 rounded-lg border border-mews-grey-100 bg-white p-2.5 text-xs leading-snug text-mews-grey-900 shadow-lg"
+          className="absolute bottom-full left-1/2 z-30 mb-2 w-64 max-w-[280px] -translate-x-1/2 rounded-xl border border-mews-grey-100 bg-white p-3 text-xs leading-snug text-mews-grey-900 shadow-popover"
         >
           {text}
         </span>

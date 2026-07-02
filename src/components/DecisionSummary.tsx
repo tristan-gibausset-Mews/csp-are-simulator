@@ -19,18 +19,16 @@ function badgeClasses(winner: WinningScenario): string {
 export default function DecisionSummary({ result }: DecisionSummaryProps) {
   return (
     <section aria-labelledby="decision-summary-title">
-      <h2 id="decision-summary-title" className="mb-3 text-lg font-semibold text-mews-grey-900">
+      <h2 id="decision-summary-title" className="section-title mb-3">
         Comparaison par horizon
       </h2>
 
       <ul className="space-y-2">
         {result.decisionPoints.map((point) => (
-          <li key={point.label} className="flex items-center justify-between gap-3 text-sm">
+          <li key={point.label} className="flex items-center justify-between gap-3 rounded-lg border border-mews-grey-100 px-3 py-2 text-sm">
             <span className="text-mews-grey-500">{point.label}</span>
-            <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${badgeClasses(point.winner)}`}>
-              {point.winner}
-            </span>
-            <span className="ml-auto font-medium text-mews-grey-900">
+            <span className={`badge font-semibold ${badgeClasses(point.winner)}`}>{point.winner}</span>
+            <span className="ml-auto font-medium tabular-nums text-mews-grey-900">
               {formatEuros(Math.abs(point.diffBenefitsOnly))}
             </span>
           </li>

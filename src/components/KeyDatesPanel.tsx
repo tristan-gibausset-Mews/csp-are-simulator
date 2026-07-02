@@ -19,18 +19,18 @@ function cumulativeAtDay(result: SimulationResult, day: number, scenario: 'CSP' 
 export default function KeyDatesPanel({ result, displayMode }: KeyDatesPanelProps) {
   return (
     <section aria-labelledby="key-dates-title">
-      <h2 id="key-dates-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
+      <h2 id="key-dates-title" className="section-title mb-4">
         Dates clés
       </h2>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] text-sm">
           <thead>
-            <tr className="border-b border-mews-grey-100 text-left text-xs uppercase tracking-wide text-mews-grey-500">
-              <th className="py-2 pr-3">Événement</th>
-              <th className="py-2 pr-3">Date</th>
-              <th className="py-2 pr-3">Scénario</th>
-              <th className="py-2 pr-3">Cumul à cette date</th>
-              <th className="py-2">Explication</th>
+            <tr className="border-b border-mews-grey-100 text-left text-[11px] font-semibold uppercase tracking-wide text-mews-grey-500">
+              <th className="py-2.5 pr-3">Événement</th>
+              <th className="py-2.5 pr-3">Date</th>
+              <th className="py-2.5 pr-3">Scénario</th>
+              <th className="py-2.5 pr-3 text-right">Cumul à cette date</th>
+              <th className="py-2.5">Explication</th>
             </tr>
           </thead>
           <tbody>
@@ -38,11 +38,11 @@ export default function KeyDatesPanel({ result, displayMode }: KeyDatesPanelProp
               const cumulative = entry.day !== null ? cumulativeAtDay(result, entry.day, entry.scenario, displayMode) : null;
               return (
                 <tr key={entry.id} className="border-b border-mews-grey-100 last:border-0 align-top">
-                  <td className="py-2 pr-3 font-medium text-mews-grey-900">{entry.label}</td>
-                  <td className="py-2 pr-3 text-mews-grey-500">{entry.day !== null ? formatDayAsMonth(entry.day) : '—'}</td>
-                  <td className="py-2 pr-3 text-mews-grey-500">{entry.scenario === 'both' ? 'CSP & ARE' : entry.scenario}</td>
-                  <td className="py-2 pr-3 text-mews-grey-900">{cumulative !== null ? formatEuros(cumulative) : '—'}</td>
-                  <td className="py-2 text-mews-grey-500">{entry.explanation}</td>
+                  <td className="py-2.5 pr-3 font-medium text-mews-grey-900">{entry.label}</td>
+                  <td className="py-2.5 pr-3 tabular-nums text-mews-grey-500">{entry.day !== null ? formatDayAsMonth(entry.day) : '—'}</td>
+                  <td className="py-2.5 pr-3 text-mews-grey-500">{entry.scenario === 'both' ? 'CSP & ARE' : entry.scenario}</td>
+                  <td className="py-2.5 pr-3 text-right tabular-nums text-mews-grey-900">{cumulative !== null ? formatEuros(cumulative) : '—'}</td>
+                  <td className="py-2.5 leading-relaxed text-mews-grey-500">{entry.explanation}</td>
                 </tr>
               );
             })}

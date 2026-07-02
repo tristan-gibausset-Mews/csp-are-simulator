@@ -86,29 +86,17 @@ function exportJson(result: SimulationResult) {
 export default function ExportButtons({ result }: ExportButtonsProps) {
   return (
     <section aria-labelledby="export-buttons-title">
-      <h2 id="export-buttons-title" className="mb-3 text-lg font-semibold text-mews-grey-900">
+      <h2 id="export-buttons-title" className="section-title mb-3">
         Export
       </h2>
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={() => exportComparisonCsv(result)}
-          className="rounded-lg border border-mews-grey-300 bg-white px-4 py-2 text-sm font-medium text-mews-grey-900 transition hover:border-mews-accent hover:text-mews-accent"
-        >
+      <div className="flex flex-wrap gap-2">
+        <button type="button" onClick={() => exportComparisonCsv(result)} className="btn-secondary px-4 py-2 text-sm">
           Exporter le tableau de comparaison (CSV)
         </button>
-        <button
-          type="button"
-          onClick={() => exportMonthlyCsv(result)}
-          className="rounded-lg border border-mews-grey-300 bg-white px-4 py-2 text-sm font-medium text-mews-grey-900 transition hover:border-mews-accent hover:text-mews-accent"
-        >
+        <button type="button" onClick={() => exportMonthlyCsv(result)} className="btn-secondary px-4 py-2 text-sm">
           Exporter le tableau mensuel (CSV)
         </button>
-        <button
-          type="button"
-          onClick={() => exportJson(result)}
-          className="rounded-lg border border-mews-grey-300 bg-white px-4 py-2 text-sm font-medium text-mews-grey-900 transition hover:border-mews-accent hover:text-mews-accent"
-        >
+        <button type="button" onClick={() => exportJson(result)} className="btn-secondary px-4 py-2 text-sm">
           Exporter hypothèses + résultats (JSON)
         </button>
         <button

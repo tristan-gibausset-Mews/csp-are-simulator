@@ -30,9 +30,36 @@ function monthBadges(month: MonthlyCashflow, result: SimulationResult): string[]
   return Array.from(badges);
 }
 
-function diffLabel(diff: number): string {
-  if (Math.abs(diff) < 0.5) return 'Égalité';
-  return diff > 0 ? `+${formatEuros(diff)} pour CSP` : `+${formatEuros(Math.abs(diff))} pour préavis + ARE`;
+function badgeColorClasses(label: string): string {
+  switch (label) {
+    case 'Préavis':
+    case 'Chômage ARE':
+      return 'bg-are-light text-are';
+    case 'Allocation CSP':
+    case 'Prime CSP':
+      return 'bg-csp-light text-csp';
+    case 'Congés payés':
+    case 'Indemnité supra-légale':
+      return 'bg-info-light text-info';
+    case 'Reprise d’emploi':
+      return 'bg-mews-accent-light text-mews-accent';
+    case 'Allocation arrêtée':
+      return 'bg-warn-light text-warn';
+    default:
+      return 'bg-mews-grey-100 text-mews-grey-500';
+  }
+}
+
+function DiffPill({ diff }: { diff: number }) {
+  if (Math.abs(diff) < 0.5) {
+    return <span className="badge bg-mews-grey-100 text-mews-grey-500">Égalité</span>;
+  }
+  const forCsp = diff > 0;
+  return (
+    <span className={`badge ${forCsp ? 'bg-csp-light text-csp' : 'bg-are-light text-are'}`}>
+      +{formatEuros(Math.abs(diff))} {forCsp ? 'CSP' : 'préavis + ARE'}
+    </span>
+  );
 }
 
 export default function SimpleMonthlyTimeline({ result, displayMode }: SimpleMonthlyTimelineProps) {
@@ -47,37 +74,39 @@ export default function SimpleMonthlyTimeline({ result, displayMode }: SimpleMon
 
   return (
     <section className="card" aria-labelledby="simple-monthly-title">
-      <h2 id="simple-monthly-title" className="text-lg font-semibold text-mews-grey-900">
+      <h2 id="simple-monthly-title" className="section-title">
         Ce que vous touchez chaque mois
       </h2>
-      <p className="mt-0.5 text-xs text-mews-grey-500">Hors salaire du nouvel emploi, sauf si vous activez l’option.</p>
+      <p className="section-subtitle">Hors salaire du nouvel emploi, sauf si vous activez l’option.</p>
 
       <div className="mt-4 overflow-x-auto">
-        <table className="w-full min-w-[560px] text-sm">
+        <table className="w-full min-w-[600px] text-sm">
           <thead>
-            <tr className="border-b border-mews-grey-100 text-left text-xs uppercase tracking-wide text-mews-grey-500">
-              <th className="py-2 pr-3">Mois</th>
-              <th className="py-2 pr-3">En acceptant le CSP</th>
-              <th className="py-2 pr-3">En gardant le préavis + ARE</th>
-              <th className="py-2 pr-3">Différence</th>
-              <th className="py-2">Ce qui se passe</th>
+            <tr className="border-b border-mews-grey-100 text-left text-[11px] font-semibold uppercase tracking-wide text-mews-grey-500">
+              <th className="py-2.5 pr-3">Mois</th>
+              <th className="py-2.5 pr-3 text-right">CSP</th>
+              <th className="py-2.5 pr-3 text-right">Préavis + ARE</th>
+              <th className="py-2.5 pr-3">Différence</th>
+              <th className="py-2.5">Ce qui se passe</th>
             </tr>
           </thead>
           <tbody>
-            {visibleMonths.map((month) => {
+            {visibleMonths.map((month, index) => {
               const cspAmount = month.csp[cspField];
               const areAmount = month.classicAre[cspField];
               return (
                 <Fragment key={month.monthIndex}>
-                  <tr className="border-b border-mews-grey-100 align-top">
-                    <td className="py-2 pr-3 font-medium text-mews-grey-900">{formatSimpleMonth(month.monthIndex + 1)}</td>
-                    <td className="py-2 pr-3 text-csp">{formatEuros(cspAmount)}</td>
-                    <td className="py-2 pr-3 text-are">{formatEuros(areAmount)}</td>
-                    <td className="py-2 pr-3">{diffLabel(cspAmount - areAmount)}</td>
-                    <td className="py-2">
+                  <tr className={`border-b border-mews-grey-100 align-top ${index % 2 === 1 ? 'bg-mews-grey-100/30' : ''}`}>
+                    <td className="py-2.5 pr-3 font-medium text-mews-grey-900">{formatSimpleMonth(month.monthIndex + 1)}</td>
+                    <td className="py-2.5 pr-3 text-right font-medium tabular-nums text-csp">{formatEuros(cspAmount)}</td>
+                    <td className="py-2.5 pr-3 text-right font-medium tabular-nums text-are">{formatEuros(areAmount)}</td>
+                    <td className="py-2.5 pr-3">
+                      <DiffPill diff={cspAmount - areAmount} />
+                    </td>
+                    <td className="py-2.5">
                       <div className="flex flex-wrap gap-1">
                         {monthBadges(month, result).map((badge) => (
-                          <span key={badge} className="rounded-full bg-mews-grey-100 px-2 py-0.5 text-xs font-medium text-mews-grey-500">
+                          <span key={badge} className={`badge ${badgeColorClasses(badge)}`}>
                             {badge}
                           </span>
                         ))}
@@ -86,8 +115,8 @@ export default function SimpleMonthlyTimeline({ result, displayMode }: SimpleMon
                   </tr>
                   {showDetail && (
                     <tr className="border-b border-mews-grey-100 bg-mews-grey-100/40 text-xs">
-                      <td className="py-2 pr-3 text-mews-grey-500">Détail</td>
-                      <td className="py-2 pr-3">
+                      <td className="py-2.5 pr-3 text-mews-grey-500">Détail</td>
+                      <td className="py-2.5 pr-3" colSpan={2}>
                         <ul className="space-y-0.5 text-mews-grey-900">
                           <li>Congés payés : {formatEuros(month.csp.paidLeave)}</li>
                           <li>Indemnité supra-légale : {formatEuros(month.csp.supraLegalSeverance)}</li>
@@ -97,7 +126,7 @@ export default function SimpleMonthlyTimeline({ result, displayMode }: SimpleMon
                           <li>IDR : {formatEuros(month.csp.idr)}</li>
                         </ul>
                       </td>
-                      <td className="py-2 pr-3" colSpan={3}>
+                      <td className="py-2.5 pr-3" colSpan={2}>
                         <ul className="space-y-0.5 text-mews-grey-900">
                           <li>Préavis : {formatEuros(month.classicAre.notice)}</li>
                           <li>Congés payés : {formatEuros(month.classicAre.paidLeave)}</li>
@@ -114,21 +143,13 @@ export default function SimpleMonthlyTimeline({ result, displayMode }: SimpleMon
         </table>
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-3">
+      <div className="mt-4 flex flex-wrap gap-2">
         {months.length > DEFAULT_VISIBLE_MONTHS && (
-          <button
-            type="button"
-            onClick={() => setShowAll((v) => !v)}
-            className="rounded-lg border border-mews-grey-300 px-3 py-1.5 text-xs font-medium text-mews-grey-900 hover:border-mews-accent hover:text-mews-accent"
-          >
+          <button type="button" onClick={() => setShowAll((v) => !v)} className="btn-secondary">
             {showAll ? 'Réduire aux 8 premiers mois' : 'Afficher tous les mois'}
           </button>
         )}
-        <button
-          type="button"
-          onClick={() => setShowDetail((v) => !v)}
-          className="rounded-lg border border-mews-grey-300 px-3 py-1.5 text-xs font-medium text-mews-grey-900 hover:border-mews-accent hover:text-mews-accent"
-        >
+        <button type="button" onClick={() => setShowDetail((v) => !v)} className="btn-secondary">
           {showDetail ? 'Masquer le détail par composant' : 'Voir le détail par composant'}
         </button>
       </div>

@@ -54,10 +54,10 @@ export default function ExplanationPanel({ result, displayMode }: ExplanationPan
 
   return (
     <section aria-labelledby="explanation-panel-title">
-      <h2 id="explanation-panel-title" className="mb-3 text-lg font-semibold text-mews-grey-900">
+      <h2 id="explanation-panel-title" className="section-title mb-3">
         Ce qu’il faut comprendre
       </h2>
-      <ul className="list-disc space-y-2 pl-5 text-sm text-mews-grey-900">
+      <ul className="list-disc space-y-2.5 pl-5 text-sm leading-relaxed text-mews-grey-900">
         {explanations.map((text) => (
           <li key={text}>{text}</li>
         ))}

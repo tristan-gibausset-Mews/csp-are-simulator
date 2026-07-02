@@ -14,7 +14,7 @@ const STATUS_LABEL: Record<PaymentPeriod['status'], string> = {
 
 const STATUS_CLASSES: Record<PaymentPeriod['status'], string> = {
   paid: 'bg-are-light text-are',
-  stopped: 'bg-mews-accent-light text-mews-accent',
+  stopped: 'bg-warn-light text-warn',
   not_started: 'bg-mews-grey-100 text-mews-grey-500',
   not_applicable: 'bg-mews-grey-100 text-mews-grey-500',
 };
@@ -33,17 +33,17 @@ function Column({ scenario, periods }: { scenario: ScenarioLabel; periods: Payme
   const colorClass = scenario === 'CSP' ? 'text-csp' : 'text-are';
   return (
     <div>
-      <h3 className={`mb-2 text-sm font-semibold ${colorClass}`}>{scenario}</h3>
+      <h3 className={`mb-2 border-b-2 pb-2 text-sm font-semibold ${colorClass} ${scenario === 'CSP' ? 'border-csp/40' : 'border-are/40'}`}>
+        {scenario}
+      </h3>
       <ul className="space-y-2">
         {periods.map((period) => (
-          <li key={period.label} className="rounded-lg border border-mews-grey-100 p-2.5">
+          <li key={period.label} className="rounded-lg border border-mews-grey-100 p-3">
             <div className="flex items-center justify-between gap-2">
               <span className="text-sm font-medium text-mews-grey-900">{period.label}</span>
-              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_CLASSES[period.status]}`}>
-                {STATUS_LABEL[period.status]}
-              </span>
+              <span className={`badge ${STATUS_CLASSES[period.status]}`}>{STATUS_LABEL[period.status]}</span>
             </div>
-            <p className="mt-1 text-xs text-mews-grey-500">
+            <p className="mt-1 text-xs leading-relaxed text-mews-grey-500">
               {formatRange(period)} — {period.explanation}
             </p>
           </li>
@@ -59,7 +59,7 @@ export default function PaymentPeriodsPanel({ result }: PaymentPeriodsPanelProps
 
   return (
     <section aria-labelledby="payment-periods-title">
-      <h2 id="payment-periods-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
+      <h2 id="payment-periods-title" className="section-title mb-4">
         Périodes de versement
       </h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">

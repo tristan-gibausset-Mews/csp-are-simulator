@@ -7,7 +7,7 @@ interface ComparisonTableProps {
 
 export default function ComparisonTable({ result }: ComparisonTableProps) {
   return (
-    <section className="card" aria-labelledby="comparison-table-title">
+    <section aria-labelledby="comparison-table-title">
       <h2 id="comparison-table-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
         Tableau de comparaison
       </h2>

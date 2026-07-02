@@ -18,7 +18,7 @@ function cumulativeAtDay(result: SimulationResult, day: number, scenario: 'CSP' 
 
 export default function KeyDatesPanel({ result, displayMode }: KeyDatesPanelProps) {
   return (
-    <section className="card" aria-labelledby="key-dates-title">
+    <section aria-labelledby="key-dates-title">
       <h2 id="key-dates-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
         Dates clés
       </h2>

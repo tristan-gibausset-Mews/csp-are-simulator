@@ -5,16 +5,20 @@ import ComparisonTable from './components/ComparisonTable';
 import CumulativeChart from './components/CumulativeChart';
 import DecisionSummary from './components/DecisionSummary';
 import DisclaimerBanner from './components/DisclaimerBanner';
+import DisplayModeToggle from './components/DisplayModeToggle';
 import EventTimeline from './components/EventTimeline';
 import ExpertSection from './components/ExpertSection';
 import ExplanationPanel from './components/ExplanationPanel';
 import ExportButtons from './components/ExportButtons';
+import HumanExplanation from './components/HumanExplanation';
 import InputPanel from './components/InputPanel';
 import KeyDatesPanel from './components/KeyDatesPanel';
-import MonthlyCashflowTable from './components/MonthlyCashflowTable';
+import MainOutcome from './components/MainOutcome';
 import PaymentPeriodsPanel from './components/PaymentPeriodsPanel';
 import ResultsCards from './components/ResultsCards';
 import ScenarioBreakdown from './components/ScenarioBreakdown';
+import SimpleMonthlyTimeline from './components/SimpleMonthlyTimeline';
+import SimplePaymentDuration from './components/SimplePaymentDuration';
 import { runSimulation } from './lib/calculationEngine';
 import { DEFAULT_INPUT } from './lib/types';
 import type { DisplayMode, SimulationInput } from './lib/types';
@@ -32,10 +36,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-cream">
       <header className="border-b border-mews-grey-100 bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-6">
-          <h1 className="text-2xl font-semibold text-mews-grey-900">Simulateur CSP vs ARE</h1>
+        <div className="mx-auto max-w-6xl px-4 py-5">
+          <h1 className="text-xl font-semibold text-mews-grey-900">Simulateur CSP vs ARE</h1>
           <p className="mt-1 text-sm text-mews-grey-500">
-            Comparez l’acceptation du CSP et le refus du CSP (préavis + ARE classique) après un licenciement économique.
+            Comparez ce que vous touchez en acceptant le CSP ou en gardant votre préavis puis l’ARE classique.
           </p>
         </div>
       </header>
@@ -54,31 +58,41 @@ export default function App() {
         )}
 
         <InputPanel input={input} onChange={handleChange} />
-        <AdvancedSettings input={input} onChange={handleChange} />
 
-        <DecisionSummary result={result} />
+        <MainOutcome result={result} />
+        <HumanExplanation result={result} />
 
-        <CumulativeChart result={result} displayMode={displayMode} onDisplayModeChange={setDisplayMode} />
-        <EventTimeline result={result} />
+        <DisplayModeToggle displayMode={displayMode} onChange={setDisplayMode} />
 
-        <ComparisonTable result={result} />
+        <SimpleMonthlyTimeline result={result} displayMode={displayMode} />
+        <SimplePaymentDuration result={result} />
+        <CumulativeChart result={result} displayMode={displayMode} />
 
-        <ScenarioBreakdown result={result} />
+        <div className="space-y-3">
+          <AdvancedSettings input={input} onChange={handleChange} />
 
-        <MonthlyCashflowTable result={result} />
-        <PaymentPeriodsPanel result={result} />
-        <KeyDatesPanel result={result} displayMode={displayMode} />
+          <ExpertSection
+            title="Voir le détail du calcul"
+            subtitle="Tableau de comparaison, détail par scénario, résultats détaillés et explications techniques."
+          >
+            <DecisionSummary result={result} />
+            <ComparisonTable result={result} />
+            <ScenarioBreakdown result={result} />
+            <ResultsCards result={result} />
+            <AssumptionsPanel result={result} />
+            <ExplanationPanel result={result} displayMode={displayMode} />
+          </ExpertSection>
 
-        <ExpertSection
-          title="Résultats experts"
-          subtitle="Chiffres détaillés et termes techniques (SJR, ASP, ARE, IDR...) pour aller plus loin — déjà résumés en langage simple ci-dessus."
-        >
-          <ResultsCards result={result} />
-          <AssumptionsPanel result={result} />
-        </ExpertSection>
+          <ExpertSection title="Voir toutes les dates" subtitle="Chronologie complète des événements, périodes de versement et dates clés.">
+            <EventTimeline result={result} />
+            <PaymentPeriodsPanel result={result} />
+            <KeyDatesPanel result={result} displayMode={displayMode} />
+          </ExpertSection>
 
-        <ExplanationPanel result={result} displayMode={displayMode} />
-        <ExportButtons result={result} />
+          <ExpertSection title="Exporter les résultats" subtitle="Tableaux au format CSV, hypothèses et résultats en JSON, graphique en PNG.">
+            <ExportButtons result={result} />
+          </ExpertSection>
+        </div>
       </main>
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-xs text-mews-grey-500">

@@ -53,7 +53,7 @@ export default function ExplanationPanel({ result, displayMode }: ExplanationPan
   }
 
   return (
-    <section className="card" aria-labelledby="explanation-panel-title">
+    <section aria-labelledby="explanation-panel-title">
       <h2 id="explanation-panel-title" className="mb-3 text-lg font-semibold text-mews-grey-900">
         Ce qu’il faut comprendre
       </h2>

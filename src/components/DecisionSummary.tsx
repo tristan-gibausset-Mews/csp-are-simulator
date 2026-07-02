@@ -11,34 +11,17 @@ function badgeClasses(winner: WinningScenario): string {
   return 'bg-mews-grey-100 text-mews-grey-500';
 }
 
+/**
+ * Détail expert du "Résultat en clair" (MainOutcome) : l'option gagnante et
+ * l'écart à chaque horizon usuel (M6, M9, M15, M20, fin de la période
+ * comparée), pour qui veut vérifier le calcul mois par mois.
+ */
 export default function DecisionSummary({ result }: DecisionSummaryProps) {
-  const mainPoint = result.decisionPoints[result.decisionPoints.length - 1];
-  const hasNewJob = result.hasNewJob;
-
   return (
-    <section className="card" aria-labelledby="decision-summary-title">
+    <section aria-labelledby="decision-summary-title">
       <h2 id="decision-summary-title" className="mb-3 text-lg font-semibold text-mews-grey-900">
-        Verdict
+        Comparaison par horizon
       </h2>
-
-      {mainPoint && (
-        <div className="mb-4 rounded-lg border border-mews-grey-100 bg-cream p-4">
-          <span className={`inline-block rounded-full px-3 py-1 text-sm font-semibold ${badgeClasses(mainPoint.winner)}`}>
-            {mainPoint.winner === 'Égalité' ? 'Égalité' : `${mainPoint.winner} gagnant`}
-          </span>
-          <p className="mt-2 text-sm text-mews-grey-900">
-            À {mainPoint.label.toLowerCase()}, {mainPoint.winner === 'Égalité'
-              ? 'les deux options sont quasiment équivalentes'
-              : `le ${mainPoint.winner} est plus favorable de ${formatEuros(Math.abs(mainPoint.diffBenefitsOnly))}`}
-            {mainPoint.winner !== 'Égalité' ? ` grâce à ${mainPoint.reason}.` : '.'}
-          </p>
-          {hasNewJob && (
-            <p className="mt-1 text-xs text-mews-grey-500">
-              Le nouveau salaire est identique dans les deux scénarios ; il ne change donc pas l’écart entre CSP et ARE.
-            </p>
-          )}
-        </div>
-      )}
 
       <ul className="space-y-2">
         {result.decisionPoints.map((point) => (

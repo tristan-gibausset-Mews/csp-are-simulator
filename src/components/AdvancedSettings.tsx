@@ -54,12 +54,32 @@ export default function AdvancedSettings({ input, onChange }: AdvancedSettingsPr
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        <h2 className="text-lg font-semibold text-mews-grey-900">Paramètres avancés</h2>
-        <span className="text-sm text-mews-grey-500">{open ? 'Masquer ▲' : 'Afficher ▼'}</span>
+        <div>
+          <h2 className="text-lg font-semibold text-mews-grey-900">Modifier les hypothèses avancées</h2>
+          <p className="mt-0.5 text-xs text-mews-grey-500">Préavis, indemnité supra-légale, durée des droits, contrat repris…</p>
+        </div>
+        <span className="shrink-0 text-sm text-mews-grey-500">{open ? 'Masquer ▲' : 'Afficher ▼'}</span>
       </button>
 
       {open && (
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <FieldLabel
+              htmlFor="currentEmployerSeniorityMonthsAdvanced"
+              text="Ancienneté chez l’employeur actuel (mois)"
+              tooltip={inputExplanations.currentEmployerSeniorityMonthsInput}
+            />
+            <input
+              id="currentEmployerSeniorityMonthsAdvanced"
+              type="number"
+              min={0}
+              step={1}
+              className="field-input"
+              value={input.currentEmployerSeniorityMonths}
+              onChange={(e) => onChange({ currentEmployerSeniorityMonths: toNumber(e.target.value) })}
+            />
+          </div>
+
           <div>
             <FieldLabel htmlFor="noticePeriodMonths" text="Durée du préavis (mois)" tooltip={inputExplanations.noticePeriodMonths} />
             <input

@@ -58,7 +58,7 @@ export default function PaymentPeriodsPanel({ result }: PaymentPeriodsPanelProps
   const arePeriods = result.paymentPeriods.filter((p) => p.scenario === 'ARE + préavis');
 
   return (
-    <section className="card" aria-labelledby="payment-periods-title">
+    <section aria-labelledby="payment-periods-title">
       <h2 id="payment-periods-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
         Périodes de versement
       </h2>

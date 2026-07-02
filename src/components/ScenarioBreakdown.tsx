@@ -102,7 +102,7 @@ export default function ScenarioBreakdown({ result }: ScenarioBreakdownProps) {
   ];
 
   return (
-    <section className="card" aria-labelledby="scenario-breakdown-title">
+    <section aria-labelledby="scenario-breakdown-title">
       <h2 id="scenario-breakdown-title" className="mb-4 text-lg font-semibold text-mews-grey-900">
         Détail par scénario
       </h2>

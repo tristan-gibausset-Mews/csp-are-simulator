@@ -49,3 +49,40 @@ export function formatDayOrDash(day: number | null): string {
   if (day === null) return '—';
   return `Jour ${Math.round(day)} (${formatDayAsMonth(day)})`;
 }
+
+// ---------------------------------------------------------------------------
+// Formatage "langage simple" (mode standard, sans jargon)
+// ---------------------------------------------------------------------------
+
+/** Formate un numéro de mois en toutes lettres (ex. "Mois 7"), jamais "M7". */
+export function formatSimpleMonth(monthNumber: number): string {
+  return `Mois ${Math.round(monthNumber)}`;
+}
+
+export type SimplePaymentStatus = 'Versée' | 'Arrêtée' | 'Non versée';
+
+/** Traduit un statut technique de période de versement en mot simple. */
+export function simplifyPaymentStatus(
+  status: 'paid' | 'stopped' | 'not_started' | 'not_applicable',
+): SimplePaymentStatus {
+  if (status === 'paid') return 'Versée';
+  if (status === 'stopped') return 'Arrêtée';
+  return 'Non versée';
+}
+
+/**
+ * Décrit une plage de jours en mois, en langage courant ("du début au mois
+ * 4", "du mois 3 au mois 7", "au mois 3"), pour les vues simplifiées.
+ */
+export function formatSimpleDayRange(startDay: number | null, endDay: number | null): string {
+  const startMonth = startDay !== null ? Math.round(startDay / DAYS_PER_MONTH) : null;
+  const endMonth = endDay !== null ? Math.round(endDay / DAYS_PER_MONTH) : null;
+
+  if (startMonth === null && endMonth === null) return '';
+  if (startMonth === 0 && endMonth !== null && endMonth !== 0) return `du début au mois ${endMonth}`;
+  if (startMonth !== null && endMonth !== null && startMonth === endMonth) return `au mois ${startMonth}`;
+  if (startMonth !== null && endMonth !== null) return `du mois ${startMonth} au mois ${endMonth}`;
+  if (startMonth !== null) return `à partir du mois ${startMonth}`;
+  if (endMonth !== null) return `jusqu’au mois ${endMonth}`;
+  return '';
+}

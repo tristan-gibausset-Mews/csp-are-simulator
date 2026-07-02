@@ -85,7 +85,7 @@ function exportJson(result: SimulationResult) {
 
 export default function ExportButtons({ result }: ExportButtonsProps) {
   return (
-    <section className="card" aria-labelledby="export-buttons-title">
+    <section aria-labelledby="export-buttons-title">
       <h2 id="export-buttons-title" className="mb-3 text-lg font-semibold text-mews-grey-900">
         Export
       </h2>

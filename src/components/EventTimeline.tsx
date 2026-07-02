@@ -13,7 +13,7 @@ function scenarioBadgeClasses(scenario: string): string {
 
 export default function EventTimeline({ result }: EventTimelineProps) {
   return (
-    <section className="card" aria-labelledby="event-timeline-title">
+    <section aria-labelledby="event-timeline-title">
       <h2 id="event-timeline-title" className="mb-3 text-lg font-semibold text-mews-grey-900">
         Chronologie des événements
       </h2>

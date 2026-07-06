@@ -13,12 +13,14 @@ interface DisplayModeToggleProps {
 export default function DisplayModeToggle({ displayMode, onChange }: DisplayModeToggleProps) {
   return (
     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <div className="inline-flex w-fit gap-0.5 rounded-lg bg-mews-grey-100 p-1 text-xs">
+      <div className="inline-flex w-fit gap-0.5 rounded-lg border border-mews-grey-300/30 bg-background-card-muted p-1 text-xs">
         <button
           type="button"
           onClick={() => onChange('benefits_only')}
           className={`rounded-md px-3 py-1.5 font-medium transition-colors ${
-            displayMode === 'benefits_only' ? 'bg-white text-mews-grey-900 shadow-sm' : 'text-mews-grey-500 hover:text-mews-grey-900'
+            displayMode === 'benefits_only'
+              ? 'bg-mews-accent text-background-page'
+              : 'text-mews-grey-500 hover:text-mews-grey-900'
           }`}
         >
           Sans le nouveau salaire
@@ -27,7 +29,9 @@ export default function DisplayModeToggle({ displayMode, onChange }: DisplayMode
           type="button"
           onClick={() => onChange('with_new_salary')}
           className={`rounded-md px-3 py-1.5 font-medium transition-colors ${
-            displayMode === 'with_new_salary' ? 'bg-white text-mews-grey-900 shadow-sm' : 'text-mews-grey-500 hover:text-mews-grey-900'
+            displayMode === 'with_new_salary'
+              ? 'bg-mews-accent text-background-page'
+              : 'text-mews-grey-500 hover:text-mews-grey-900'
           }`}
         >
           Avec le nouveau salaire

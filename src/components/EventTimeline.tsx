@@ -6,8 +6,8 @@ interface EventTimelineProps {
 }
 
 function scenarioBadgeClasses(scenario: string): string {
-  if (scenario === 'CSP') return 'bg-csp-light text-csp';
-  if (scenario === 'ARE + préavis') return 'bg-are-light text-are';
+  if (scenario === 'CSP') return 'bg-csp/15 text-csp';
+  if (scenario === 'ARE + préavis') return 'bg-are/15 text-are';
   return 'bg-mews-grey-100 text-mews-grey-500';
 }
 

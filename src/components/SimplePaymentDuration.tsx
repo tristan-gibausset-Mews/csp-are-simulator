@@ -57,8 +57,8 @@ function describePeriod(period: PaymentPeriod, result: SimulationResult): string
 }
 
 function statusBadgeClasses(status: PaymentPeriod['status']): string {
-  if (status === 'paid') return 'bg-are-light text-are';
-  if (status === 'stopped') return 'bg-warn-light text-warn';
+  if (status === 'paid') return 'bg-are/15 text-are';
+  if (status === 'stopped') return 'bg-warn/15 text-warn';
   return 'bg-mews-grey-100 text-mews-grey-500';
 }
 
@@ -78,7 +78,7 @@ function Block({
       <h3 className={`mb-3 border-b-2 pb-2 text-sm font-semibold text-mews-grey-900 ${accentClass}`}>{title}</h3>
       <ul className="space-y-2.5">
         {periods.map((period) => (
-          <li key={period.label} className="rounded-lg border border-mews-grey-100 p-3">
+          <li key={period.label} className="rounded-lg border border-mews-grey-300/30 bg-background-card-muted p-3">
             <div className="flex items-center justify-between gap-2">
               <p className="text-sm font-semibold text-mews-grey-900">{LABEL_OVERRIDES[period.label] ?? period.label}</p>
               <span className={`badge shrink-0 ${statusBadgeClasses(period.status)}`}>{simplifyPaymentStatus(period.status)}</span>

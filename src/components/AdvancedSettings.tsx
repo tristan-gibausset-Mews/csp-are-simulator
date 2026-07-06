@@ -47,7 +47,7 @@ export default function AdvancedSettings({ input, onChange }: AdvancedSettingsPr
 
   return (
     <AccordionPanel title="Modifier les hypothèses avancées" subtitle="Préavis, indemnité supra-légale, durée des droits, contrat repris…">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="space-y-4">
         <div>
           <FieldLabel
             htmlFor="currentEmployerSeniorityMonthsAdvanced"
@@ -129,7 +129,7 @@ export default function AdvancedSettings({ input, onChange }: AdvancedSettingsPr
           />
         </div>
 
-        <div className="flex items-end pb-2">
+        <div>
           <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-mews-grey-900">
             <input
               type="checkbox"

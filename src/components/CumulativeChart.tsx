@@ -22,12 +22,12 @@ interface CumulativeChartProps {
   displayMode: DisplayMode;
 }
 
-const COLOR_GRID = '#EEEEF3';
-const COLOR_AXIS = '#8E8BA8';
-const COLOR_CSP = '#3E63E0';
-const COLOR_ARE = '#279268';
-const COLOR_MUTED = '#C9CCE0';
-const COLOR_ACCENT = '#6E5AE0';
+const COLOR_GRID = '#3A3944';
+const COLOR_AXIS = '#A6A4B8';
+const COLOR_CSP = '#FF83DA';
+const COLOR_ARE = '#E3FFFD';
+const COLOR_MUTED = '#4A4954';
+const COLOR_ACCENT = '#FF5303';
 
 function pointAtDay(result: SimulationResult, day: number) {
   const idx = Math.min(result.dailySeries.length - 1, Math.max(0, Math.round(day)));
@@ -54,11 +54,11 @@ function ChartTooltipContent({
   const areTotal = displayMode === 'with_new_salary' ? point.classicAre.withNewSalaryTotal : point.classicAre.benefitsOnlyTotal;
 
   return (
-    <div className="rounded-xl border border-mews-grey-100 bg-white p-3 text-xs shadow-popover">
+    <div className="rounded-xl border border-mews-grey-300/40 bg-background-card p-3 text-xs shadow-popover">
       <p className="mb-1.5 font-semibold text-mews-grey-900">Mois {Math.round(label * 10) / 10}</p>
       <p className="text-csp">CSP : {formatEuros(cspTotal)}</p>
       <p className="text-are">Préavis + ARE : {formatEuros(areTotal)}</p>
-      <p className="mt-1.5 border-t border-mews-grey-100 pt-1.5 font-medium text-mews-grey-900">
+      <p className="mt-1.5 border-t border-mews-grey-300/30 pt-1.5 font-medium text-mews-grey-900">
         Écart : {formatSignedEuros(cspTotal - areTotal)}
       </p>
     </div>
@@ -99,11 +99,11 @@ export default function CumulativeChart({ result, displayMode }: CumulativeChart
   return (
     <section className="card" aria-labelledby="chart-title">
       <h2 id="chart-title" className="section-title">
-        Évolution du cumul
+        Évolution du cumul perçu
       </h2>
       <p className="section-subtitle">Par défaut, le graphique compare uniquement CSP, préavis, ARE et primes — sans le nouveau salaire.</p>
 
-      <div className="mt-4 rounded-xl border border-mews-grey-100 bg-cream/50 p-2">
+      <div className="mt-4 rounded-xl border border-mews-grey-300/30 bg-background-card-muted p-2">
         <div className="h-72 w-full md:h-[380px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data} margin={{ top: 28, right: 16, left: 4, bottom: 4 }}>
@@ -166,7 +166,7 @@ export default function CumulativeChart({ result, displayMode }: CumulativeChart
               />
 
               {crossoverMonth !== null && crossoverValue !== null && (
-                <ReferenceDot x={crossoverMonth} y={crossoverValue} r={5} fill={COLOR_ACCENT} stroke="white" strokeWidth={2} />
+                <ReferenceDot x={crossoverMonth} y={crossoverValue} r={5} fill={COLOR_ACCENT} stroke="#242330" strokeWidth={2} />
               )}
             </LineChart>
           </ResponsiveContainer>

@@ -5,42 +5,40 @@ export default {
   theme: {
     extend: {
       colors: {
-        cream: '#FDFBF7',
+        // Fond de page (noir) vs surface de carte vs surface haute-contraste.
+        'background-page': '#000000',
+        'background-card': '#2D2C37',
+        'background-card-muted': '#242330',
+        'background-card-light': '#FFFCF6',
+        cream: '#FFFCF6',
+
+        // Échelle "grise" réutilisée partout dans les composants existants,
+        // recalibrée pour un thème sombre : 900 = texte principal (clair),
+        // 500 = texte secondaire, 300 = bordure discrète, 100 = fond en survol.
         'mews-grey': {
-          100: '#EEEEF3',
-          300: '#C9CCE0',
-          500: '#8E8BA8',
-          900: '#20212E',
+          100: '#3A3944',
+          300: '#4A4954',
+          500: '#A6A4B8',
+          900: '#FFFCF6',
         },
+
+        // Accent principal Mews (rose) : boutons, focus, checkboxes, courbe CSP.
         'mews-accent': {
-          DEFAULT: '#6E5AE0',
-          hover: '#5A46CC',
-          light: '#F1EEFC',
+          DEFAULT: '#FF83DA',
+          hover: '#FF63CE',
         },
-        info: {
-          DEFAULT: '#8C7CE8',
-          light: '#F1EEFC',
-        },
-        success: {
-          DEFAULT: '#279268',
-          light: '#E4F5EC',
-        },
-        csp: {
-          DEFAULT: '#3E63E0',
-          light: '#E8EEFC',
-        },
-        are: {
-          DEFAULT: '#279268',
-          light: '#E4F5EC',
-        },
-        warn: {
-          DEFAULT: '#C97A3B',
-          light: '#FBEEE1',
-        },
+
+        // Accents secondaires de la palette Mews, utilisés avec parcimonie.
+        csp: '#FF83DA',
+        are: '#E3FFFD',
+        warn: '#FF5303',
+        info: '#F7E1F7',
+        success: '#E8FF5B',
+        mint: '#D1F9D6',
       },
       boxShadow: {
-        card: '0 1px 2px 0 rgba(32, 33, 46, 0.05), 0 1px 1px 0 rgba(32, 33, 46, 0.03)',
-        popover: '0 8px 24px -4px rgba(32, 33, 46, 0.12), 0 2px 6px -2px rgba(32, 33, 46, 0.06)',
+        card: '0 1px 0 0 rgba(255, 252, 246, 0.03) inset',
+        popover: '0 12px 32px -8px rgba(0, 0, 0, 0.6), 0 4px 10px -4px rgba(0, 0, 0, 0.4)',
       },
       fontFamily: {
         sans: ['Söhne', 'Inter', 'system-ui', 'sans-serif'],

@@ -18,7 +18,7 @@ export default function AccordionPanel({ title, subtitle, children, defaultOpen 
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <section className="rounded-xl border border-mews-grey-100 bg-white/70">
+    <section className="rounded-xl border border-mews-grey-300/30 bg-background-card-muted">
       <button
         type="button"
         className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-mews-grey-100/50"
@@ -39,7 +39,7 @@ export default function AccordionPanel({ title, subtitle, children, defaultOpen 
         </svg>
       </button>
 
-      {open && <div className="space-y-6 border-t border-mews-grey-100 px-4 py-5">{children}</div>}
+      {open && <div className="space-y-6 border-t border-mews-grey-300/30 px-4 py-5">{children}</div>}
     </section>
   );
 }

@@ -111,14 +111,14 @@ export default function ScenarioBreakdown({ result }: ScenarioBreakdownProps) {
         <button
           type="button"
           onClick={() => setMobileTab('CSP')}
-          className={`rounded-md px-3 py-1.5 font-medium transition-colors ${mobileTab === 'CSP' ? 'bg-white text-csp shadow-sm' : 'text-mews-grey-500'}`}
+          className={`rounded-md px-3 py-1.5 font-medium transition-colors ${mobileTab === 'CSP' ? 'bg-background-card text-csp shadow-sm' : 'text-mews-grey-500'}`}
         >
           CSP
         </button>
         <button
           type="button"
           onClick={() => setMobileTab('ARE')}
-          className={`rounded-md px-3 py-1.5 font-medium transition-colors ${mobileTab === 'ARE' ? 'bg-white text-are shadow-sm' : 'text-mews-grey-500'}`}
+          className={`rounded-md px-3 py-1.5 font-medium transition-colors ${mobileTab === 'ARE' ? 'bg-background-card text-are shadow-sm' : 'text-mews-grey-500'}`}
         >
           ARE + préavis
         </button>

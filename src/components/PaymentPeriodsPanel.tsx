@@ -13,8 +13,8 @@ const STATUS_LABEL: Record<PaymentPeriod['status'], string> = {
 };
 
 const STATUS_CLASSES: Record<PaymentPeriod['status'], string> = {
-  paid: 'bg-are-light text-are',
-  stopped: 'bg-warn-light text-warn',
+  paid: 'bg-are/15 text-are',
+  stopped: 'bg-warn/15 text-warn',
   not_started: 'bg-mews-grey-100 text-mews-grey-500',
   not_applicable: 'bg-mews-grey-100 text-mews-grey-500',
 };

@@ -6,8 +6,8 @@ interface DecisionSummaryProps {
 }
 
 function badgeClasses(winner: WinningScenario): string {
-  if (winner === 'CSP') return 'bg-csp-light text-csp';
-  if (winner === 'ARE + préavis') return 'bg-are-light text-are';
+  if (winner === 'CSP') return 'bg-csp/15 text-csp';
+  if (winner === 'ARE + préavis') return 'bg-are/15 text-are';
   return 'bg-mews-grey-100 text-mews-grey-500';
 }
 

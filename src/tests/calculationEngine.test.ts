@@ -593,6 +593,40 @@ describe('aggregateDailySeriesByMonth', () => {
   });
 });
 
+describe('runSimulation — result.monthlySeries couvre toujours 23 mois', () => {
+  it('affiche 23 mois même quand la reprise d’emploi résout tout en quelques mois', () => {
+    const result = runSimulation({ ...baseInput, monthsBeforeNewJob: 4, newMonthlyGrossSalary: 3500 });
+    expect(result.monthlySeries).toHaveLength(23);
+  });
+
+  it('affiche 23 mois même en horizon manuel très court', () => {
+    const result = runSimulation({
+      ...baseInput,
+      monthsBeforeNewJob: 4,
+      newMonthlyGrossSalary: 3500,
+      simulationHorizonMode: 'manual',
+      simulationHorizonMonths: 6,
+    });
+    expect(result.monthlySeries).toHaveLength(23);
+    expect(result.horizon.displayedMonths).toBe(6);
+  });
+
+  it('affiche 23 mois même sans reprise d’emploi (horizon auto plus long)', () => {
+    const result = runSimulation({ ...baseInput, monthsBeforeNewJob: null });
+    expect(result.monthlySeries).toHaveLength(23);
+  });
+
+  it('les mois au-delà de la fin des droits (sans nouveau salaire) restent à 0 €, jamais inventés', () => {
+    const result = runSimulation({ ...baseInput, monthsBeforeNewJob: 4, newMonthlyGrossSalary: 3500 });
+    const lastMonth = result.monthlySeries[result.monthlySeries.length - 1];
+    expect(lastMonth).toBeDefined();
+    if (lastMonth) {
+      closeTo(lastMonth.csp.benefitsOnlyMonthlyTotal, 0, 0.01);
+      closeTo(lastMonth.classicAre.benefitsOnlyMonthlyTotal, 0, 0.01);
+    }
+  });
+});
+
 // ---------------------------------------------------------------------------
 // Test 21 — dictionnaire des explications (tooltips)
 // ---------------------------------------------------------------------------

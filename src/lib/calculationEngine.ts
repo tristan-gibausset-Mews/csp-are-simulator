@@ -1327,6 +1327,14 @@ export function getCurveInterpretation(
 // 11. Orchestration
 // ---------------------------------------------------------------------------
 
+/**
+ * Nombre de mois toujours affichés dans le tableau "Ce que vous touchez
+ * chaque mois", indépendamment de l'horizon (auto ou manuel) utilisé pour le
+ * graphique. Un mois sans versement affiche simplement 0 € ; aucun montant
+ * n'est jamais inventé au-delà de la fin des droits.
+ */
+export const MONTHLY_TABLE_DISPLAY_MONTHS = 23;
+
 export function runSimulation(input: SimulationInput): SimulationResult {
   const ctx = buildContext(input);
 
@@ -1339,8 +1347,11 @@ export function runSimulation(input: SimulationInput): SimulationResult {
   );
   const manualHorizonDays =
     input.simulationHorizonMode === 'manual' ? input.simulationHorizonMonths * DAYS_PER_MONTH : 0;
+  // +1 mois de marge pour absorber l'arrondi de aggregateDailySeriesByMonth
+  // (Math.floor) et garantir au moins MONTHLY_TABLE_DISPLAY_MONTHS mois complets.
+  const monthlyTableMinDays = (MONTHLY_TABLE_DISPLAY_MONTHS + 1) * DAYS_PER_MONTH;
   const computationHorizonDays = Math.min(
-    Math.max(naturalMaxDay + 30, manualHorizonDays + 5, 90),
+    Math.max(naturalMaxDay + 30, manualHorizonDays + 5, 90, monthlyTableMinDays),
     (ABSOLUTE_MAX_SIMULATION_MONTHS + 12) * DAYS_PER_MONTH,
   );
 
@@ -1374,7 +1385,14 @@ export function runSimulation(input: SimulationInput): SimulationResult {
 
   const displayDayCount = Math.min(Math.ceil(displayedMonths * DAYS_PER_MONTH), fullSeries.length - 1);
   const dailySeries = fullSeries.slice(0, displayDayCount + 1);
-  const monthlySeries = aggregateDailySeriesByMonth(dailySeries);
+
+  // Le tableau mensuel affiche toujours MONTHLY_TABLE_DISPLAY_MONTHS mois,
+  // indépendamment de l'horizon du graphique (qui peut être plus court en
+  // mode automatique) : on l'agrège depuis la série complète, jamais depuis
+  // la série tronquée à l'horizon d'affichage.
+  const monthlyTableDayCount = Math.min(Math.ceil(monthlyTableMinDays), fullSeries.length - 1);
+  const monthlyTableSeries = fullSeries.slice(0, monthlyTableDayCount + 1);
+  const monthlySeries = aggregateDailySeriesByMonth(monthlyTableSeries).slice(0, MONTHLY_TABLE_DISPLAY_MONTHS);
 
   const events = buildEvents(ctx, crossoverDay);
   const paymentPeriods = buildPaymentPeriods(ctx);

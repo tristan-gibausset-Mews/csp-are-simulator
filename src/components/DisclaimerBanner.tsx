@@ -4,7 +4,7 @@ export default function DisclaimerBanner() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-xl border border-warn/20 bg-warn-light px-4 py-2.5" role="note">
+    <div className="rounded-xl border border-warn/20 bg-warn/15 px-4 py-2.5" role="note">
       <div className="flex flex-wrap items-center gap-2.5">
         <svg
           aria-hidden="true"

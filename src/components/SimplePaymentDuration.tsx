@@ -32,17 +32,22 @@ function describePeriod(period: PaymentPeriod, result: SimulationResult): string
         ? `Versée au mois ${startMonth} puis au mois ${endMonth} si le contrat reste éligible.`
         : `Versée au mois ${startMonth}.`;
 
-    case 'ARE après CSP':
+    case 'ARE après CSP': {
       if (period.status === 'not_started') return 'Non versée, car vous reprenez un emploi avant la fin du CSP.';
       if (period.status === 'not_applicable') return 'Non applicable dans ce scénario.';
-      return period.status === 'stopped'
-        ? `Versée à partir du mois ${startMonth}, jusqu’à la reprise d’emploi.`
-        : `Versée à partir du mois ${startMonth}, jusqu’à la fin de vos droits.`;
+      if (period.status === 'stopped') {
+        return `Versée après les 12 mois de CSP, puis arrêtée à la reprise d’emploi au mois ${endMonth}.`;
+      }
+      const durationMonths = startMonth !== null && endMonth !== null ? Math.max(0, endMonth - startMonth) : null;
+      return durationMonths !== null
+        ? `Versée après les 12 mois de CSP, pendant environ ${durationMonths} mois.`
+        : 'Versée après les 12 mois de CSP, jusqu’à la fin de vos droits.';
+    }
 
     case 'Préavis':
       return `Versé pendant ${result.input.noticePeriodMonths} mois.`;
 
-    case 'Congés payés et indemnité supra-légale':
+    case 'Congés payés':
       return 'Versés à la fin du préavis.';
 
     case 'ARE classique':

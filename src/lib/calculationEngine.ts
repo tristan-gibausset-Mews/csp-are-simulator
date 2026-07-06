@@ -40,8 +40,6 @@ import {
   PRIME_RECLASSEMENT_ELIGIBILITY_LIMIT_MONTH,
   PRIME_RECLASSEMENT_PAYMENT_2_DELAY_DAYS,
   PRIME_RECLASSEMENT_RATE,
-  SPECIFIC_DEFERRAL_CAP_DAYS,
-  SPECIFIC_DEFERRAL_DIVISOR_2026,
   WAITING_PERIOD_DAYS,
 } from './regulatoryConstants';
 import type {
@@ -410,14 +408,12 @@ interface EngineContext {
   totalAREEntitlementDays: number;
 
   paidLeaveAmount: number;
-  supraLegalSeveranceAmount: number;
   cspNoticePaidToEmployee: number;
   noticePaidToFranceTravail: number;
   areNoticePaidToEmployee: number;
 
   noticePeriodDays: number;
   paidLeaveDeferralDays: number;
-  specificDeferralDays: number;
   classicAreStartDay: number;
 
   hasNewJob: boolean;
@@ -451,8 +447,8 @@ interface EngineContext {
 function buildContext(input: SimulationInput): EngineContext {
   const {
     currentMonthlyGrossSalary,
-    remainingPaidLeaveDays,
-    monthsBeforeNewJob,
+    remainingPaidLeaveDays: rawRemainingPaidLeaveDays,
+    monthsBeforeNewJob: rawMonthsBeforeNewJob,
     newMonthlyGrossSalary,
     age,
     seniorityAtLeastOneYear,
@@ -464,8 +460,13 @@ function buildContext(input: SimulationInput): EngineContext {
     newJobContractType,
     newJobContractDurationMonths,
     sameWorkingTime,
-    supraLegalSeveranceMonths,
   } = input;
+
+  // Garde-fou défensif : des valeurs négatives (hors plage normale de l'UI,
+  // qui impose min=0) ne doivent jamais produire de montants ou de dates
+  // négatifs en aval. On les ramène à 0 plutôt que de les laisser se propager.
+  const remainingPaidLeaveDays = Math.max(0, rawRemainingPaidLeaveDays);
+  const monthsBeforeNewJob = rawMonthsBeforeNewJob === null ? null : Math.max(0, rawMonthsBeforeNewJob);
 
   const sjr = (currentMonthlyGrossSalary * 12) / 365;
   const annualReferenceSalary = currentMonthlyGrossSalary * 12;
@@ -482,7 +483,6 @@ function buildContext(input: SimulationInput): EngineContext {
   const totalAREEntitlementDays = areEntitlement.totalAREEntitlementDays;
 
   const paidLeaveAmount = remainingPaidLeaveDays * sjr;
-  const supraLegalSeveranceAmount = supraLegalSeveranceMonths * currentMonthlyGrossSalary;
 
   const cspNoticePaidToEmployee = seniorityAtLeastOneYear
     ? Math.max(0, noticePeriodMonths - NOTICE_CONTRIBUTION_CAP_MONTHS) * currentMonthlyGrossSalary
@@ -494,9 +494,7 @@ function buildContext(input: SimulationInput): EngineContext {
 
   const noticePeriodDays = noticePeriodMonths * DAYS_PER_MONTH;
   const paidLeaveDeferralDays = Math.min(remainingPaidLeaveDays, PAID_LEAVE_DEFERRAL_CAP_DAYS);
-  const rawSpecificDeferralDays = Math.floor(supraLegalSeveranceAmount / SPECIFIC_DEFERRAL_DIVISOR_2026);
-  const specificDeferralDays = Math.min(rawSpecificDeferralDays, SPECIFIC_DEFERRAL_CAP_DAYS);
-  const classicAreStartDay = noticePeriodDays + paidLeaveDeferralDays + specificDeferralDays + WAITING_PERIOD_DAYS;
+  const classicAreStartDay = noticePeriodDays + paidLeaveDeferralDays + WAITING_PERIOD_DAYS;
 
   const hasNewJob = monthsBeforeNewJob !== null;
   const newJobStartDay = hasNewJob ? (monthsBeforeNewJob as number) * DAYS_PER_MONTH : null;
@@ -577,13 +575,11 @@ function buildContext(input: SimulationInput): EngineContext {
     areEntitlement,
     totalAREEntitlementDays,
     paidLeaveAmount,
-    supraLegalSeveranceAmount,
     cspNoticePaidToEmployee,
     noticePaidToFranceTravail,
     areNoticePaidToEmployee,
     noticePeriodDays,
     paidLeaveDeferralDays,
-    specificDeferralDays,
     classicAreStartDay,
     hasNewJob,
     newJobStartDay,
@@ -619,7 +615,6 @@ function cspBreakdownAtDay(ctx: EngineContext, day: number): DailyScenarioCashfl
 
   const paidLeave = ctx.paidLeaveAmount;
   const notice = ctx.cspNoticePaidToEmployee;
-  const supraLegalSeverance = ctx.supraLegalSeveranceAmount;
 
   // aspIsPaidToday = day < CSP_MAX_DAYS && day < newJobStartDay (ou pas de reprise)
   const asp = ctx.aspDaily * clamp(d, 0, ctx.cspAspEndDay);
@@ -648,10 +643,10 @@ function cspBreakdownAtDay(ctx: EngineContext, day: number): DailyScenarioCashfl
 
   const newSalary = ctx.hasNewJob ? ctx.newJobDailySalary * Math.max(0, d - (ctx.newJobStartDay ?? 0)) : 0;
 
-  const benefitsOnlyTotal = paidLeave + notice + supraLegalSeverance + asp + are + reclassementPrime + idr;
+  const benefitsOnlyTotal = paidLeave + notice + asp + are + reclassementPrime + idr;
   const withNewSalaryTotal = benefitsOnlyTotal + newSalary;
 
-  return { paidLeave, notice, supraLegalSeverance, asp, are, reclassementPrime, idr, newSalary, benefitsOnlyTotal, withNewSalaryTotal };
+  return { paidLeave, notice, asp, are, reclassementPrime, idr, newSalary, benefitsOnlyTotal, withNewSalaryTotal };
 }
 
 function classicAreBreakdownAtDay(ctx: EngineContext, day: number): DailyScenarioCashflow {
@@ -660,7 +655,6 @@ function classicAreBreakdownAtDay(ctx: EngineContext, day: number): DailyScenari
   // Le taux de salaire journalier du préavis correspond au SJR (salaire * 12 / 365).
   const notice = ctx.sjr * clamp(d, 0, ctx.noticePeriodDays);
   const paidLeave = d >= ctx.noticePeriodDays ? ctx.paidLeaveAmount : 0;
-  const supraLegalSeverance = d >= ctx.noticePeriodDays ? ctx.supraLegalSeveranceAmount : 0;
 
   // classicAreIsPaidToday = day >= classicAreStartDay && jours indemnisés < droits && pas encore repris
   let are = 0;
@@ -687,10 +681,10 @@ function classicAreBreakdownAtDay(ctx: EngineContext, day: number): DailyScenari
   const asp = 0;
   const reclassementPrime = 0;
   const idr = 0;
-  const benefitsOnlyTotal = paidLeave + notice + supraLegalSeverance + asp + are + reclassementPrime + idr;
+  const benefitsOnlyTotal = paidLeave + notice + asp + are + reclassementPrime + idr;
   const withNewSalaryTotal = benefitsOnlyTotal + newSalary;
 
-  return { paidLeave, notice, supraLegalSeverance, asp, are, reclassementPrime, idr, newSalary, benefitsOnlyTotal, withNewSalaryTotal };
+  return { paidLeave, notice, asp, are, reclassementPrime, idr, newSalary, benefitsOnlyTotal, withNewSalaryTotal };
 }
 
 function buildDailySeries(ctx: EngineContext, totalDays: number): DailySimulationPoint[] {
@@ -739,7 +733,6 @@ function diffScenario(start: DailyScenarioCashflow, end: DailyScenarioCashflow):
   return {
     paidLeave: end.paidLeave - start.paidLeave,
     notice: end.notice - start.notice,
-    supraLegalSeverance: end.supraLegalSeverance - start.supraLegalSeverance,
     asp: end.asp - start.asp,
     are: end.are - start.are,
     reclassementPrime: end.reclassementPrime - start.reclassementPrime,
@@ -755,7 +748,6 @@ function diffScenario(start: DailyScenarioCashflow, end: DailyScenarioCashflow):
 const ZERO_CASHFLOW: DailyScenarioCashflow = {
   paidLeave: 0,
   notice: 0,
-  supraLegalSeverance: 0,
   asp: 0,
   are: 0,
   reclassementPrime: 0,
@@ -771,10 +763,10 @@ const ZERO_CASHFLOW: DailyScenarioCashflow = {
  * longueur de la série fournie.
  *
  * Le mois 1 utilise une référence de départ à zéro (et non le point du jour
- * 0) : les versements en un seul coup au jour 0 (congés payés, indemnité
- * supra-légale, excédent de préavis CSP...) sont déjà inclus dans le cumul
- * du jour 0 lui-même, donc une simple différence point[0] -> point[30]
- * masquerait entièrement ces versements du premier mois.
+ * 0) : les versements en un seul coup au jour 0 (congés payés, excédent de
+ * préavis CSP...) sont déjà inclus dans le cumul du jour 0 lui-même, donc une
+ * simple différence point[0] -> point[30] masquerait entièrement ces
+ * versements du premier mois.
  */
 export function aggregateDailySeriesByMonth(series: DailySimulationPoint[]): MonthlyCashflow[] {
   if (series.length === 0) return [];
@@ -907,7 +899,7 @@ function buildEvents(ctx: EngineContext, crossoverDay: number | null): Simulatio
     scenario: 'ARE + préavis',
     type: 'notice',
     explanation:
-      "Le préavis se termine. Les congés payés et l'indemnité supra-légale sont versés, et le décompte des différés avant l'ARE classique commence.",
+      "Le préavis se termine. Les congés payés restants sont versés, et le décompte du différé congés payés puis du délai d'attente avant l'ARE classique commence.",
   });
 
   push({
@@ -917,15 +909,6 @@ function buildEvents(ctx: EngineContext, crossoverDay: number | null): Simulatio
     scenario: 'ARE + préavis',
     type: 'paid_leave',
     explanation: 'Versement des congés payés restants à la fin du préavis. Ce versement crée aussi un différé avant le début de l’ARE.',
-  });
-
-  push({
-    id: 'supra_legal_are',
-    day: ctx.noticePeriodDays,
-    label: 'Versement indemnité supra-légale',
-    scenario: 'ARE + préavis',
-    type: 'supra_legal',
-    explanation: 'Versement de l’indemnité supra-légale à la fin du préavis. Ce versement crée un différé spécifique avant le début de l’ARE.',
   });
 
   if (!ctx.classicAreNeverStarted) {
@@ -1136,7 +1119,7 @@ function buildPaymentPeriods(ctx: EngineContext): PaymentPeriod[] {
 
   periods.push({
     scenario: 'ARE + préavis',
-    label: 'Congés payés et indemnité supra-légale',
+    label: 'Congés payés',
     startDay: ctx.noticePeriodDays,
     endDay: ctx.noticePeriodDays,
     status: 'paid',
@@ -1418,12 +1401,10 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     aspDaily: ctx.aspDaily,
     areEntitlement: ctx.areEntitlement,
     paidLeaveAmount: ctx.paidLeaveAmount,
-    supraLegalSeveranceAmount: ctx.supraLegalSeveranceAmount,
     areNoticePaidToEmployee: ctx.areNoticePaidToEmployee,
     cspNoticePaidToEmployee: ctx.cspNoticePaidToEmployee,
     noticePaidToFranceTravail: ctx.noticePaidToFranceTravail,
     paidLeaveDeferralDays: ctx.paidLeaveDeferralDays,
-    specificDeferralDays: ctx.specificDeferralDays,
     waitingPeriodDays: WAITING_PERIOD_DAYS,
     classicAreStartDay: ctx.classicAreStartDay,
     areDegressiveApplicableClassic: ctx.areDegressiveApplicableClassic,
@@ -1438,6 +1419,7 @@ export function runSimulation(input: SimulationInput): SimulationResult {
     cspAreAfterCspApplicable: ctx.cspAreAfterCspApplicable,
     cspAreAfterCspStartDay: ctx.cspAreAfterCspApplicable ? ctx.cspAreAfterCspStartDay : null,
     cspAreAfterCspExhaustionDay: ctx.cspAreAfterCspApplicable ? ctx.cspAreAfterCspExhaustionDay : null,
+    remainingAreDaysAfterCsp: ctx.remainingAreDaysAfterCsp,
     areDegressiveApplicableAfterCsp: ctx.cspAreAfterCspApplicable && ctx.areRestanteDegressive,
     areDailyAfterDegressivityAfterCsp:
       ctx.cspAreAfterCspApplicable && ctx.areRestanteDegressive ? ctx.areRestanteDailyRate : null,

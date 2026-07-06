@@ -33,11 +33,18 @@ export default function DisclaimerBanner() {
       </div>
 
       {open && (
-        <p className="mt-2 border-t border-warn/15 pt-2 text-xs leading-relaxed text-mews-grey-900">
-          Le calcul officiel France Travail peut différer selon votre situation exacte (attestation employeur,
-          primes, absences, indemnités de rupture, temps partiel, âge, ancienneté...). Aucune cotisation sociale,
-          CSG/CRDS ou impôt n’est calculée : tous les montants affichés sont bruts.
-        </p>
+        <div className="mt-2 space-y-2 border-t border-warn/15 pt-2 text-xs leading-relaxed text-mews-grey-900">
+          <p>
+            Le calcul officiel France Travail peut différer selon votre situation exacte (attestation employeur,
+            primes, absences, indemnités de rupture, temps partiel, âge, ancienneté...). Aucune cotisation sociale,
+            CSG/CRDS ou impôt n’est calculée : tous les montants affichés sont bruts.
+          </p>
+          <p>
+            Pour simplifier, le simulateur utilise le salaire brut mensuel renseigné comme approximation de la
+            moyenne des 12 derniers mois. Le calcul officiel France Travail peut différer si votre salaire a varié,
+            si vous avez eu des primes, des absences ou des périodes non travaillées.
+          </p>
+        </div>
       )}
     </div>
   );

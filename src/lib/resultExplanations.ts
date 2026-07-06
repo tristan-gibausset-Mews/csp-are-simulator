@@ -18,9 +18,7 @@ export type ResultExplanationKey =
   | 'noticePaidToEmployeeAre'
   | 'noticeNotPaidToEmployeeCsp'
   | 'paidLeaveAmount'
-  | 'supraLegalSeveranceAmount'
   | 'paidLeaveDeferralDays'
-  | 'specificDeferralDays'
   | 'waitingPeriodDays'
   | 'classicAreStartDate'
   | 'cspReclassementPrime'
@@ -44,7 +42,7 @@ export type ResultExplanationKey =
 
 export const resultExplanations: Record<ResultExplanationKey, string> = {
   estimatedSjr:
-    'Le SJR, ou salaire journalier de référence, sert de base au calcul de l’ARE et du CSP. Ici, il est estimé à partir du salaire brut mensuel : salaire brut mensuel × 12 ÷ 365. Le SJR officiel France Travail peut être différent si vous avez eu des primes, absences, périodes non travaillées ou variations de salaire.',
+    'Le SJR, ou salaire journalier de référence, sert de base au calcul de l’ARE et du CSP. Ici, il est estimé à partir du salaire brut mensuel renseigné, utilisé comme approximation de la moyenne des 12 derniers mois : salaire mensuel × 12 ÷ 365.',
 
   annualReferenceSalary:
     'C’est l’estimation du salaire brut annuel utilisée par le simulateur. Elle correspond au salaire brut mensuel actuel multiplié par 12. Le calcul officiel peut intégrer d’autres éléments selon l’attestation employeur.',
@@ -76,20 +74,14 @@ export const resultExplanations: Record<ResultExplanationKey, string> = {
   paidLeaveAmount:
     'Montant brut estimé des congés payés restants. Le simulateur le calcule avec : nombre de jours de congés payés restants × SJR estimé. En ARE classique, ces congés créent aussi un différé d’indemnisation.',
 
-  supraLegalSeveranceAmount:
-    'Montant versé au-delà des indemnités légales ou conventionnelles. Le simulateur l’exprime en mois de salaire brut. En ARE classique, cette somme crée un différé spécifique qui repousse le début de l’indemnisation.',
-
   paidLeaveDeferralDays:
     'Nombre de jours pendant lesquels le début de l’ARE est repoussé à cause des congés payés versés à la rupture. Dans ce simulateur, il est plafonné à 30 jours.',
-
-  specificDeferralDays:
-    'Nombre de jours de décalage de l’ARE lié aux indemnités supra-légales. Le simulateur l’estime en divisant l’indemnité supra-légale par le diviseur réglementaire utilisé dans les constantes, puis en appliquant le plafond de 150 jours.',
 
   waitingPeriodDays:
     'Délai fixe de 7 jours appliqué avant le démarrage de l’ARE, après les éventuels différés. Il ne s’applique pas à l’ASP du CSP.',
 
   classicAreStartDate:
-    'Date approximative à laquelle l’ARE classique commence, après le préavis, le différé congés payés, le différé spécifique et le délai d’attente de 7 jours.',
+    'Date approximative à laquelle l’ARE classique commence, après le préavis, le différé congés payés et le délai d’attente de 7 jours.',
 
   cspReclassementPrime:
     'Prime possible en cas de reprise d’un emploi durable avant la fin du 10e mois de CSP. Elle correspond à 50 % des droits ASP restants au moment de la reprise et est versée en deux fois : à la reprise, puis environ 3 mois plus tard si le contrat est toujours en cours.',
@@ -159,7 +151,6 @@ export type InputExplanationKey =
   | 'newJobContractType'
   | 'newJobContractDurationMonths'
   | 'sameWorkingTime'
-  | 'supraLegalSeveranceMonthsInput'
   | 'previousEmployerAffiliationMonthsInput'
   | 'existingARERemainingDaysInput'
   | 'officialAREEntitlementDaysOverrideInput'
@@ -168,7 +159,7 @@ export type InputExplanationKey =
 
 export const inputExplanations: Record<InputExplanationKey, string> = {
   currentMonthlyGrossSalary:
-    'Base principale de la simulation. Elle sert à estimer le SJR, l’ASP, l’ARE, le préavis et les indemnités exprimées en mois de salaire.',
+    'Renseignez votre dernier salaire brut mensuel ou votre meilleure estimation de la moyenne brute mensuelle des 12 derniers mois. Le simulateur utilise cette valeur pour estimer le salaire de référence, l’ARE et le CSP.',
 
   remainingPaidLeaveDays:
     'Nombre de jours de congés payés qui seront indemnisés à la rupture. Ils créent aussi un différé dans le scénario ARE classique.',
@@ -197,9 +188,6 @@ export const inputExplanations: Record<InputExplanationKey, string> = {
     'Sert à vérifier si un CDD ou un contrat d’intérim est suffisamment long pour ouvrir droit à la prime de reclassement CSP.',
 
   sameWorkingTime: 'Sert à vérifier l’éligibilité à l’IDR si le nouvel emploi est moins rémunéré que l’ancien.',
-
-  supraLegalSeveranceMonthsInput:
-    'Montant versé au-delà des indemnités légales ou conventionnelles, exprimé en mois de salaire. Elle repousse le démarrage de l’ARE classique via un différé spécifique.',
 
   previousEmployerAffiliationMonthsInput:
     'Mois travaillés chez d’autres employeurs dans la période de référence. Sert à améliorer l’estimation de la durée ARE.',

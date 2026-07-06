@@ -12,9 +12,9 @@ function monthBadges(month: MonthlyCashflow, result: SimulationResult): string[]
 
   if (month.classicAre.notice > 0.5) badges.add('Préavis');
   if (month.csp.paidLeave > 0.5 || month.classicAre.paidLeave > 0.5) badges.add('Congés payés');
-  if (month.csp.supraLegalSeverance > 0.5 || month.classicAre.supraLegalSeverance > 0.5) badges.add('Indemnité supra-légale');
   if (month.csp.asp > 0.5) badges.add('Allocation CSP');
-  if (month.classicAre.are > 0.5 || month.csp.are > 0.5) badges.add('Chômage ARE');
+  if (month.classicAre.are > 0.5) badges.add('Chômage ARE');
+  if (month.csp.are > 0.5) badges.add('ARE après CSP');
   if (month.csp.reclassementPrime > 0.5) badges.add('Prime CSP');
 
   for (const event of result.events) {
@@ -35,9 +35,9 @@ function badgeColorClasses(label: string): string {
       return 'bg-are/15 text-are';
     case 'Allocation CSP':
     case 'Prime CSP':
+    case 'ARE après CSP':
       return 'bg-csp/15 text-csp';
     case 'Congés payés':
-    case 'Indemnité supra-légale':
       return 'bg-info/15 text-info';
     case 'Reprise d’emploi':
       return 'bg-mews-accent/15 text-mews-accent';
@@ -114,9 +114,8 @@ export default function SimpleMonthlyTimeline({ result, displayMode }: SimpleMon
                       <td className="py-2.5 pr-3" colSpan={2}>
                         <ul className="space-y-0.5 text-mews-grey-900">
                           <li>Congés payés : {formatEuros(month.csp.paidLeave)}</li>
-                          <li>Indemnité supra-légale : {formatEuros(month.csp.supraLegalSeverance)}</li>
                           <li>Allocation CSP : {formatEuros(month.csp.asp)}</li>
-                          <li>Chômage après CSP : {formatEuros(month.csp.are)}</li>
+                          <li>ARE après CSP : {formatEuros(month.csp.are)}</li>
                           <li>Prime CSP : {formatEuros(month.csp.reclassementPrime)}</li>
                           <li>IDR : {formatEuros(month.csp.idr)}</li>
                         </ul>
@@ -125,7 +124,6 @@ export default function SimpleMonthlyTimeline({ result, displayMode }: SimpleMon
                         <ul className="space-y-0.5 text-mews-grey-900">
                           <li>Préavis : {formatEuros(month.classicAre.notice)}</li>
                           <li>Congés payés : {formatEuros(month.classicAre.paidLeave)}</li>
-                          <li>Indemnité supra-légale : {formatEuros(month.classicAre.supraLegalSeverance)}</li>
                           <li>Chômage classique (ARE) : {formatEuros(month.classicAre.are)}</li>
                         </ul>
                       </td>

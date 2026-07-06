@@ -59,9 +59,7 @@ export default function ResultsCards({ result }: ResultsCardsProps) {
       tooltipKey: 'noticeNotPaidToEmployeeCsp',
     },
     { label: 'Congés payés', value: formatEuros(result.paidLeaveAmount), tooltipKey: 'paidLeaveAmount' },
-    { label: 'Indemnité supra-légale', value: formatEuros(result.supraLegalSeveranceAmount), tooltipKey: 'supraLegalSeveranceAmount' },
     { label: 'Différé congés payés', value: `${Math.round(result.paidLeaveDeferralDays)} jours`, tooltipKey: 'paidLeaveDeferralDays' },
-    { label: 'Différé spécifique', value: `${result.specificDeferralDays} jours`, tooltipKey: 'specificDeferralDays' },
     { label: 'Délai d’attente', value: `${result.waitingPeriodDays} jours`, tooltipKey: 'waitingPeriodDays' },
     {
       label: 'Début ARE classique estimé',

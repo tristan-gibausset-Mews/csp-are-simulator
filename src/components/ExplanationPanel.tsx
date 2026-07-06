@@ -10,7 +10,6 @@ export default function ExplanationPanel({ result, displayMode }: ExplanationPan
     'Le CSP démarre immédiatement car l’ASP n’a ni différé ni délai d’attente.',
     'L’ARE classique démarre avec l’avantage du préavis, versé intégralement au salarié.',
     'Les congés payés décalent le début de l’ARE classique.',
-    'L’indemnité supra-légale ajoute un différé spécifique.',
     'L’ASP du CSP n’est jamais dégressive, quel que soit le niveau de salaire.',
   ];
 
@@ -20,7 +19,7 @@ export default function ExplanationPanel({ result, displayMode }: ExplanationPan
 
   if (result.hasNewJob && result.classicAreNeverStarted) {
     explanations.push(
-      'La reprise d’emploi intervient avant le début estimé de l’ARE classique. Dans cette simulation, aucune ARE classique n’est donc versée. Le scénario ARE + préavis repose alors principalement sur le préavis, les congés payés et l’indemnité supra-légale.',
+      'La reprise d’emploi intervient avant le début estimé de l’ARE classique. Dans cette simulation, aucune ARE classique n’est donc versée. Le scénario ARE + préavis repose alors principalement sur le préavis et les congés payés.',
     );
   }
 

@@ -25,7 +25,8 @@ conseil juridique ou un calcul RH officiel.**
 - Tous les montants affichés sont **bruts**. Aucune cotisation sociale, CSG/CRDS
   ni impôt n'est calculée.
 - Le SJR (salaire journalier de référence) est **approximé** à partir du seul
-  salaire mensuel brut renseigné (`salaire mensuel * 12 / 365`). Le calcul
+  salaire mensuel brut renseigné, utilisé comme proxy de la moyenne brute
+  mensuelle des 12 derniers mois (`salaire mensuel * 12 / 365`). Le calcul
   officiel France Travail repose sur l'attestation employeur et peut différer
   significativement selon les primes, absences, périodes non travaillées,
   indemnités de rupture, temps partiel, âge, ancienneté et la situation exacte
@@ -205,10 +206,9 @@ Ce projet est structuré pour être facilement importé dans [Lovable](https://l
 
 - **Indemnités uniquement** (mode par défaut) : les courbes et tableaux ne
   montrent que les sommes liées à la rupture, au chômage et aux aides CSP
-  (préavis, congés payés, indemnité supra-légale, ASP, ARE, prime de
-  reclassement, IDR). Le nouveau salaire éventuel est exclu. Après une reprise
-  d'emploi, les courbes peuvent devenir plates si plus aucune indemnité n'est
-  due.
+  (préavis, congés payés, ASP, ARE, prime de reclassement, IDR). Le nouveau
+  salaire éventuel est exclu. Après une reprise d'emploi, les courbes peuvent
+  devenir plates si plus aucune indemnité n'est due.
 - **Total avec nouveau salaire** : le nouveau salaire est ajouté aux deux
   scénarios à partir de la date de reprise. Comme il s'agit du même emploi et
   du même salaire dans les deux scénarios, les courbes peuvent devenir
@@ -242,8 +242,7 @@ changer les droits calculés.
 
 - Si la reprise intervient **avant** le début estimé de l'ARE classique,
   aucune ARE classique n'est versée dans cette simulation (le scénario ARE +
-  préavis ne repose que sur le préavis, les congés payés et l'indemnité
-  supra-légale).
+  préavis ne repose que sur le préavis et les congés payés).
 - Si la reprise intervient **après** le début de l'ARE classique, celle-ci
   s'arrête à la date de reprise (version simplifiée, sans réactivation
   ultérieure des droits).

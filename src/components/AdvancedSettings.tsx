@@ -46,7 +46,7 @@ export default function AdvancedSettings({ input, onChange }: AdvancedSettingsPr
   };
 
   return (
-    <AccordionPanel title="Modifier les hypothèses avancées" subtitle="Préavis, indemnité supra-légale, durée des droits, contrat repris…">
+    <AccordionPanel title="Modifier les hypothèses avancées" subtitle="Préavis, durée des droits, contrat repris…">
       <div className="space-y-4">
         <div>
           <FieldLabel
@@ -75,23 +75,6 @@ export default function AdvancedSettings({ input, onChange }: AdvancedSettingsPr
             className="field-input"
             value={input.noticePeriodMonths}
             onChange={(e) => onChange({ noticePeriodMonths: toNumber(e.target.value) })}
-          />
-        </div>
-
-        <div>
-          <FieldLabel
-            htmlFor="supraLegalSeveranceMonths"
-            text="Indemnité supra-légale (mois de salaire)"
-            tooltip={inputExplanations.supraLegalSeveranceMonthsInput}
-          />
-          <input
-            id="supraLegalSeveranceMonths"
-            type="number"
-            min={0}
-            step={0.5}
-            className="field-input"
-            value={input.supraLegalSeveranceMonths}
-            onChange={(e) => onChange({ supraLegalSeveranceMonths: toNumber(e.target.value) })}
           />
         </div>
 

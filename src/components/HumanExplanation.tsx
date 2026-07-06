@@ -6,8 +6,8 @@ interface HumanExplanationProps {
 
 /**
  * Explication en 2 à 4 phrases, en langage courant. Les termes techniques
- * (SJR, ASP, différé spécifique...) sont volontairement évités ici — ils
- * restent disponibles dans "Voir le détail du calcul".
+ * (SJR, ASP...) sont volontairement évités ici — ils restent disponibles
+ * dans "Voir le détail du calcul".
  */
 function buildSentences(result: SimulationResult): string[] {
   const { input, chosenAid } = result;
@@ -19,15 +19,13 @@ function buildSentences(result: SimulationResult): string[] {
       sentences.push(
         `Vous reprenez un emploi au mois ${input.monthsBeforeNewJob}, avant que le chômage classique (ARE) ne démarre.`,
       );
-      sentences.push(
-        'Dans le scénario préavis + ARE, vous touchez donc surtout le préavis, les congés payés et l’indemnité supra-légale.',
-      );
+      sentences.push('Dans le scénario préavis + ARE, vous touchez donc surtout le préavis et les congés payés.');
     } else if (result.classicAreStoppedByNewJob) {
       sentences.push(
         `Vous reprenez un emploi au mois ${input.monthsBeforeNewJob}, après le début du chômage classique (ARE), qui s’arrête alors.`,
       );
       sentences.push(
-        'Dans le scénario préavis + ARE, vous touchez le préavis, les congés payés et l’indemnité supra-légale, puis le chômage classique (ARE) jusqu’à la reprise.',
+        'Dans le scénario préavis + ARE, vous touchez le préavis et les congés payés, puis le chômage classique (ARE) jusqu’à la reprise.',
       );
     } else {
       sentences.push(`Vous reprenez un emploi au mois ${input.monthsBeforeNewJob}.`);

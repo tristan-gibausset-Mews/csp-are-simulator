@@ -59,7 +59,6 @@ export default function AssumptionsPanel({ result }: AssumptionsPanelProps) {
     },
     { label: 'Préavis utilisé', value: `${input.noticePeriodMonths} mois` },
     { label: 'Congés payés utilisés', value: `${input.remainingPaidLeaveDays} jours` },
-    { label: 'Indemnité supra-légale utilisée', value: `${input.supraLegalSeveranceMonths} mois de salaire` },
     {
       label: 'Date de reprise d’emploi',
       value: result.hasNewJob ? formatDayOrDash(result.newJobStartDay) : 'Pas de reprise d’emploi prévue',

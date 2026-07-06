@@ -24,9 +24,6 @@ export const CSP_MAX_DAYS = 365;
 export const WAITING_PERIOD_DAYS = 7;
 export const PAID_LEAVE_DEFERRAL_CAP_DAYS = 30;
 
-export const SPECIFIC_DEFERRAL_DIVISOR_2026 = 111.8;
-export const SPECIFIC_DEFERRAL_CAP_DAYS = 150;
-
 // Préavis
 export const NOTICE_CONTRIBUTION_CAP_MONTHS = 3;
 

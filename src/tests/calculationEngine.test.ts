@@ -37,7 +37,6 @@ const baseInput: SimulationInput = {
   newJobContractType: 'CDI',
   newJobContractDurationMonths: null,
   sameWorkingTime: true,
-  supraLegalSeveranceMonths: 1,
 
   simulationHorizonMode: 'manual',
   simulationHorizonMonths: 24,
@@ -435,7 +434,7 @@ describe('runSimulation — Test 18 : ASP arrêtée après reprise', () => {
 describe('runSimulation — Test 19 : ARE non démarrée si reprise avant début ARE', () => {
   const result = runSimulation({
     ...baseInput, monthsBeforeNewJob: 4, newMonthlyGrossSalary: 3500,
-    noticePeriodMonths: 3, remainingPaidLeaveDays: 28, supraLegalSeveranceMonths: 1,
+    noticePeriodMonths: 3, remainingPaidLeaveDays: 28,
   });
 
   it('l’ARE classique ne démarre jamais', () => {
@@ -454,7 +453,7 @@ describe('runSimulation — Test 19 : ARE non démarrée si reprise avant début
 describe('runSimulation — Test 20 : ARE arrêtée si reprise après le début de l’ARE', () => {
   const result = runSimulation({
     ...baseInput, monthsBeforeNewJob: 8, newMonthlyGrossSalary: 3500,
-    noticePeriodMonths: 3, remainingPaidLeaveDays: 0, supraLegalSeveranceMonths: 0,
+    noticePeriodMonths: 3, remainingPaidLeaveDays: 0,
   });
 
   it('l’ARE classique est versée puis stoppée à la reprise', () => {
@@ -565,7 +564,6 @@ describe('aggregateDailySeriesByMonth', () => {
       const reconstructed =
         monthAfterReprise.csp.paidLeave +
         monthAfterReprise.csp.notice +
-        monthAfterReprise.csp.supraLegalSeverance +
         monthAfterReprise.csp.asp +
         monthAfterReprise.csp.are +
         monthAfterReprise.csp.reclassementPrime +
@@ -581,13 +579,11 @@ describe('aggregateDailySeriesByMonth', () => {
     expect(firstMonth).toBeDefined();
     if (firstMonth) {
       closeTo(firstMonth.csp.paidLeave, result.paidLeaveAmount, 0.01);
-      closeTo(firstMonth.csp.supraLegalSeverance, result.supraLegalSeveranceAmount, 0.01);
-      // Ces montants ne doivent pas être comptés une seconde fois au mois 2.
+      // Ce montant ne doit pas être compté une seconde fois au mois 2.
       const secondMonth = months[1];
       expect(secondMonth).toBeDefined();
       if (secondMonth) {
         closeTo(secondMonth.csp.paidLeave, 0, 0.01);
-        closeTo(secondMonth.csp.supraLegalSeverance, 0, 0.01);
       }
     }
   });

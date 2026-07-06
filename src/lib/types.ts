@@ -35,7 +35,6 @@ export interface SimulationInput {
   newJobContractType: ContractType;
   newJobContractDurationMonths: number | null;
   sameWorkingTime: boolean;
-  supraLegalSeveranceMonths: number;
 
   simulationHorizonMode: SimulationHorizonMode;
   simulationHorizonMonths: number;
@@ -58,7 +57,6 @@ export const DEFAULT_INPUT: SimulationInput = {
   newJobContractType: 'CDI',
   newJobContractDurationMonths: null,
   sameWorkingTime: true,
-  supraLegalSeveranceMonths: 1,
 
   simulationHorizonMode: 'auto',
   simulationHorizonMonths: 23,
@@ -72,7 +70,6 @@ export const DEFAULT_INPUT: SimulationInput = {
 export interface DailyScenarioCashflow {
   paidLeave: number;
   notice: number;
-  supraLegalSeverance: number;
   asp: number;
   are: number;
   reclassementPrime: number;
@@ -98,7 +95,6 @@ export interface DailySimulationPoint {
 export interface MonthlyScenarioCashflow {
   paidLeave: number;
   notice: number;
-  supraLegalSeverance: number;
   asp: number;
   are: number;
   reclassementPrime: number;
@@ -137,7 +133,6 @@ export interface PaymentPeriod {
 export type SimulationEventType =
   | 'notice'
   | 'paid_leave'
-  | 'supra_legal'
   | 'are_start'
   | 'are_stop'
   | 'asp_stop'
@@ -245,14 +240,12 @@ export interface SimulationResult {
   areEntitlement: AREEntitlementResult;
 
   paidLeaveAmount: number;
-  supraLegalSeveranceAmount: number;
 
   areNoticePaidToEmployee: number;
   cspNoticePaidToEmployee: number;
   noticePaidToFranceTravail: number;
 
   paidLeaveDeferralDays: number;
-  specificDeferralDays: number;
   waitingPeriodDays: number;
   classicAreStartDay: number;
 
@@ -268,6 +261,8 @@ export interface SimulationResult {
   cspAreAfterCspApplicable: boolean;
   cspAreAfterCspStartDay: number | null;
   cspAreAfterCspExhaustionDay: number | null;
+  /** Reliquat de droits ARE restant après les 365 jours de CSP (totalAREEntitlementDays - 365, jamais négatif). */
+  remainingAreDaysAfterCsp: number;
   areDegressiveApplicableAfterCsp: boolean;
   areDailyAfterDegressivityAfterCsp: number | null;
 

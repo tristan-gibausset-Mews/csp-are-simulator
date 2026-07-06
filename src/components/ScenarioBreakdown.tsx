@@ -41,7 +41,6 @@ export default function ScenarioBreakdown({ result }: ScenarioBreakdownProps) {
 
   const cspRows: Row[] = [
     { label: 'Congés payés versés', value: formatEuros(result.paidLeaveAmount) },
-    { label: 'Indemnité supra-légale versée', value: formatEuros(result.supraLegalSeveranceAmount) },
     {
       label: 'Préavis non versé / versé à France Travail',
       value: formatEuros(result.noticePaidToFranceTravail),
@@ -53,6 +52,11 @@ export default function ScenarioBreakdown({ result }: ScenarioBreakdownProps) {
       label: 'Durée ASP',
       value: `${Math.round(result.cspAspEndDay)} jours`,
       hint: result.cspAspStoppedByNewJob ? 'Arrêtée par la reprise d’emploi' : 'Sur les 12 mois du CSP',
+    },
+    {
+      label: 'Reliquat ARE après CSP',
+      value: `${Math.round(result.remainingAreDaysAfterCsp)} jours`,
+      hint: result.remainingAreDaysAfterCsp <= 0 ? 'Droits ARE totaux ≤ 365 jours : pas de reliquat' : undefined,
     },
     {
       label: 'ARE restante après CSP',
@@ -77,9 +81,7 @@ export default function ScenarioBreakdown({ result }: ScenarioBreakdownProps) {
   const areRows: Row[] = [
     { label: 'Préavis versé au salarié', value: formatEuros(result.areNoticePaidToEmployee) },
     { label: 'Congés payés versés', value: formatEuros(result.paidLeaveAmount) },
-    { label: 'Indemnité supra-légale versée', value: formatEuros(result.supraLegalSeveranceAmount) },
     { label: 'Différé congés payés', value: `${Math.round(result.paidLeaveDeferralDays)} jours` },
-    { label: 'Différé spécifique', value: `${result.specificDeferralDays} jours` },
     { label: 'Délai d’attente', value: `${result.waitingPeriodDays} jours` },
     {
       label: 'Date de début ARE',
